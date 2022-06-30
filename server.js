@@ -12,14 +12,7 @@ import { profile } from 'console';
 
 //se não estiver logado ele não permite acesso, redirecionando para a página de login novamente
 function isLoggedIn(req, res, next) {
-    req.user ? next() : res.header('Content-Type', 'text/html');
-    res.sendFile(__dirname + '/site/views/login.html', function(err){
-        if (err) {
-            return res.status(err.status).end();
-        } else {
-            return res.status(200).end();
-        }
-    });
+    req.user ? next() : res.redirect('/login');
 }
 
 const app = express();
@@ -111,6 +104,17 @@ app.get('/user', (req, res) =>{
     res.send(userProfile);
 });
 app.get('/inicio', isLoggedIn, (req, res) =>{
+    // if (req.user.id == "113860311129940378030"){     //pra deixar uma página de admin!!!!!
+    // res.header('Content-Type', 'text/html');
+    // res.sendFile(__dirname + '/site/views/erro.html', function(err){
+    //     if (err) {
+    //         return res.status(err.status).end();
+    //     } else {
+    //         return res.status(200).end();
+    //     }
+    // });
+    // }
+    // else{
     res.header('Content-Type', 'text/html');
     res.sendFile(__dirname + '/index.html', function(err){
         if (err) {
@@ -119,6 +123,7 @@ app.get('/inicio', isLoggedIn, (req, res) =>{
             return res.status(200).end();
         }
     });
+    // }
 });
 app.get('*', (req, res) => {
     res.header('Content-Type', 'text/html');

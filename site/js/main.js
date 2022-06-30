@@ -4,7 +4,7 @@ function teste(){
     fetch('/user')
     .then((res) => res.json())
     .then((res) => {
-        criarLinha(res.email);
+        criarLinha(res.id);
     })
 }
 function criarLinha(email){
