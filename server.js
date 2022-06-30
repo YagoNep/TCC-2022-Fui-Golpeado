@@ -5,11 +5,21 @@ import fileupload from 'express-fileupload';
 import passport from 'passport';
 import GoogleStrategy from 'passport-google-oauth2';
 import session from 'express-session';
+import 'dotenv/config';
+import { profile } from 'console';
+
+    var userProfile;
 
 //se não estiver logado ele não permite acesso, redirecionando para a página de login novamente
 function isLoggedIn(req, res, next) {
     req.user ? next() : res.header('Content-Type', 'text/html');
-    res.sendFile(__dirname + '/site/views/login.html');
+    res.sendFile(__dirname + '/site/views/login.html', function(err){
+        if (err) {
+            return res.status(err.status).end();
+        } else {
+            return res.status(200).end();
+        }
+    });
 }
 
 const app = express();
@@ -34,13 +44,14 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 passport.use(new GoogleStrategy({
-    clientID:     "983696481079-fed246nudrtjucuvstrael5bd8bq1hcj.apps.googleusercontent.com",
-    clientSecret: "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",
+    clientID:     process.env.clientID,
+    clientSecret: process.env.clientSecret,
     callbackURL: "http://localhost:8080/google/callback",
     passReqToCallback   : true
   },
   function(request, accessToken, refreshToken, profile, done) {
-    return done(null, profile);
+    userProfile = profile;
+    return done(null, userProfile);
   }
 ));
 
@@ -54,11 +65,23 @@ passport.deserializeUser((user,done)=>{
 
 app.get('/', (req, res) => {
     res.header('Content-Type', 'text/html');
-    res.sendFile(__dirname + '/site/views/login.html');
+    res.sendFile(__dirname + '/site/views/login.html', function(err){
+        if (err) {
+            return res.status(err.status).end();
+        } else {
+            return res.status(200).end();
+        }
+    });
 });
 app.get('/login', (req, res) => {
     res.header('Content-Type', 'text/html');
-    res.sendFile(__dirname + '/site/views/login.html');
+    res.sendFile(__dirname + '/site/views/login.html', function(err){
+        if (err) {
+            return res.status(err.status).end();
+        } else {
+            return res.status(200).end();
+        }
+    });
 });
 app.get('/google',
     passport.authenticate('google', { scope: ['email', 'profile'] }
@@ -70,7 +93,13 @@ app.get('/google/callback',
     })
 );
 app.get('/google/failure', async (req, res) =>{
-    res.send("Deu errado")
+    res.send("Deu errado!", function(err){
+        if (err) {
+            return res.status(err.status).end();
+        } else {
+            return res.status(200).end();
+        }
+    });
 });
 app.get('/logout', (req, res) =>{
     req.logout(function(err){
@@ -78,11 +107,26 @@ app.get('/logout', (req, res) =>{
         res.redirect('/');
     });
 });
+app.get('/user', (req, res) =>{
+    res.send(userProfile);
+});
 app.get('/inicio', isLoggedIn, (req, res) =>{
     res.header('Content-Type', 'text/html');
-    res.sendFile(__dirname + '/index.html');
+    res.sendFile(__dirname + '/index.html', function(err){
+        if (err) {
+            return res.status(err.status).end();
+        } else {
+            return res.status(200).end();
+        }
+    });
 });
 app.get('*', (req, res) => {
     res.header('Content-Type', 'text/html');
-    res.sendFile(__dirname + '/site/views/erro.html');
+    res.sendFile(__dirname + '/site/views/erro.html', function(err){
+        if (err) {
+            return res.status(err.status).end();
+        } else {
+            return res.status(200).end();
+        }
+    });
 });
