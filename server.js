@@ -8,7 +8,7 @@ import session from 'express-session';
 import 'dotenv/config';
 import { profile } from 'console';
 
-    var userProfile;
+var userProfile;
 
 //se não estiver logado ele não permite acesso, redirecionando para a página de login novamente
 function isLoggedIn(req, res, next) {
@@ -56,6 +56,27 @@ passport.deserializeUser((user,done)=>{
     done(null, user)
 });
 
+app.post('/', isLoggedIn, (req, res) =>{
+    if (req.files) {
+        console.log(req.files)
+        var file = req.files.file
+        var filename = file.name
+        var nome = filename.split(".");
+        var nomerealzao = nome[1];
+        var nomerealzaozao = req.user.id + "." + nomerealzao; 
+        console.log(nomerealzaozao);
+    }
+
+    file.mv('./site/img/'+nomerealzaozao, function (err) {
+        if(err){
+            res.send(err)
+        }
+        else {
+            res.send("File Uploaded")
+        }
+    })
+})
+
 app.get('/', (req, res) => {
     res.header('Content-Type', 'text/html');
     res.sendFile(__dirname + '/site/views/login.html', function(err){
@@ -66,6 +87,14 @@ app.get('/', (req, res) => {
         }
     });
 });
+
+app.get('/imagem', isLoggedIn, (req, res) =>{
+    let foto = '/img/' + req.user.id + ".jpg";
+    console.log(foto);
+    res.send([{foto: foto}]);
+    
+})
+
 app.get('/login', (req, res) => {
     res.header('Content-Type', 'text/html');
     res.sendFile(__dirname + '/site/views/login.html', function(err){
@@ -76,15 +105,18 @@ app.get('/login', (req, res) => {
         }
     });
 });
+
 app.get('/google',
     passport.authenticate('google', { scope: ['email', 'profile'] }
 ));
+
 app.get('/google/callback',
     passport.authenticate( 'google', {
         successRedirect: '/inicio',
         failureRedirect: '/google/failure'
     })
 );
+
 app.get('/google/failure', async (req, res) =>{
     res.send("Deu errado!", function(err){
         if (err) {
@@ -94,15 +126,18 @@ app.get('/google/failure', async (req, res) =>{
         }
     });
 });
+
 app.get('/logout', (req, res) =>{
     req.logout(function(err){
         if(err) {return next (err);}
         res.redirect('/');
     });
 });
+
 app.get('/user', (req, res) =>{
     res.send(userProfile);
 });
+
 app.get('/inicio', isLoggedIn, (req, res) =>{
     // if (req.user.id == "113860311129940378030"){     //pra deixar uma página de admin!!!!!
     // res.header('Content-Type', 'text/html');
@@ -125,6 +160,7 @@ app.get('/inicio', isLoggedIn, (req, res) =>{
     });
     // }
 });
+
 app.get('*', (req, res) => {
     res.header('Content-Type', 'text/html');
     res.sendFile(__dirname + '/site/views/erro.html', function(err){

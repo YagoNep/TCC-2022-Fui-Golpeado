@@ -18,7 +18,7 @@
                 </div>
                 <div class="form-outline mb-3">
                     <label class="form-label" for="loginName">Relato</label>
-                    <textarea type="text" class="form-control" placeholder="Fui vítima de um golpe no aplicativo..." rows="5" maxlength="750" required name="relato"></textarea>
+                    <textarea type="text" class="form-control" placeholder="Fui vítima de um golpe no aplicativo..." rows="5" maxlength="750" required name="relato" style="resize: none"></textarea>
                 </div>
 
                 <div class="input-group mt-3">
@@ -47,6 +47,33 @@
                             <label class="form-check-label aplicativo" for="inlineRadio6">Outro</label>
                           </div>
                     </div>
+                    <fieldset>
+                      <div class="field-group">
+                        <div class="field">
+                          <label for="state">Estado</label>
+                          <select name="uf" required="required">
+                            <option value="">Selecione o estado</option>
+                          </select>
+                
+                          <input type="hidden" name="state" required="required">
+                        </div>
+                
+                        <div class="field">
+                          <label for="city">Cidade</label>
+                          <select name="city" disabled="disabled" required="required">
+                            <option value="">Selecione a cidade</option>
+                          </select>
+                        </div>
+                      </div>
+                    </fieldset>
+                    <div>
+                      <form method="POST" action="/" enctype="multipart/form-data">
+                        <input type="file" name="file"/>
+                        <input type="submit" value="Upload"/>
+                      </form>
+                    </div>
+                    <button id="teste4">sadsadsa</button>
+                    <img id="teste3" src="" alt="" srcset="" height="300px" width="300px">
               </div>
             </div>
           </div>
