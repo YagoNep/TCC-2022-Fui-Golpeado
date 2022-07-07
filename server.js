@@ -7,6 +7,7 @@ import GoogleStrategy from 'passport-google-oauth2';
 import session from 'express-session';
 import 'dotenv/config';
 import { profile } from 'console';
+import database from './database.js';
 
 var userProfile;
 
@@ -25,7 +26,6 @@ app.use((req, res, next) => {
     console.log(req.url);
     next();
 });
-
 app.use(fileupload());
 app.use(express.json());
 app.use(express.static(__dirname + '/site'));
@@ -89,10 +89,9 @@ app.get('/', (req, res) => {
 });
 
 app.get('/imagem', isLoggedIn, (req, res) =>{
-    let foto = '/img/' + req.user.id + ".jpg";
+    let foto = '/img/' + req.user.id + ".png";
     console.log(foto);
     res.send([{foto: foto}]);
-    
 })
 
 app.get('/login', (req, res) => {
