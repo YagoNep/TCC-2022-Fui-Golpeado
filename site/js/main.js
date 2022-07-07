@@ -1,5 +1,24 @@
 document.querySelector('#add').addEventListener("click", teste);
 document.querySelector('#teste4').addEventListener("click", teste2);
+document.querySelector("select[name=uf]").addEventListener("change", getCities)
+
+function carregarPerfil(){
+    fetch('/user')
+    .then((res) => res.json())
+    .then((res) => {
+        mostrarPerfil(res);
+    })
+}
+
+function mostrarPerfil(res){
+    var fotoPerfil = document.getElementById('fotoPerfil');
+    var nomePerfil = document.getElementById('nomePerfil');
+    fotoPerfil.src = res.picture;
+    nomePerfil.textContent = res.displayName;
+    console.log(res);
+}
+
+carregarPerfil();
 
 function teste(){
     fetch('/user')
@@ -68,15 +87,22 @@ function getCities(event) {
     .then( cities => {
         
         for ( const city of cities ) {
-            citySelect.innerHTML += `<option value='${city.nome}'>${city.nome}</option>`
-        }
+            citySelect.innerHTML += `<option value='${city.id}'>${city.nome}</option>`
+        } // city.id.substr(0,2) pra pegar o id do estado
 
         citySelect.disabled = false
     } )
 
-
 }
 
-document
-    .querySelector("select[name=uf]")
-    .addEventListener("change", getCities)
+
+
+const areaSelect = document.querySelector(`[id="cidades"]`);
+
+areaSelect.addEventListener(`change`, (e) => {
+  // log(`e.target`, e.target);
+  const select = e.target;
+  const value = select.value;
+  const desc = select.selectedOptions[0].text;
+  console.log(value, desc);
+});
