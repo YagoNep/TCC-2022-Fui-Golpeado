@@ -30,8 +30,6 @@ function carregarAplicativos(){
     })
 }
 
-carregarPerfil();
-
 function mostrarAplicativos(id, nome){
     var APPS = document.getElementById('RadioGroup');
     var div = document.createElement("div");
