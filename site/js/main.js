@@ -20,6 +20,40 @@ function mostrarPerfil(res){
 
 carregarPerfil();
 
+function carregarAplicativos(){
+    fetch('/app')
+    .then((res) => res.json())
+    .then((res) => {
+        for(const app of res){
+        mostrarAplicativos(app.ID_Aplicativo, app.Nome_Aplicativo);
+    }
+    })
+}
+
+carregarPerfil();
+
+function mostrarAplicativos(id, nome){
+    var APPS = document.getElementById('RadioGroup');
+    var div = document.createElement("div");
+    div.className = "form-check form-check-inline aplicativo";
+    var input = document.createElement("input");
+    input.className = "form-check-input";
+    input.setAttribute("type", "radio");
+    input.setAttribute("name", "inlineRadioOptions");
+    input.setAttribute("id", "inlineRadio" + id);
+    input.setAttribute("value", id);
+    var label = document.createElement("label");
+    label.className = "form-check-label aplicativo";
+    label.setAttribute("for", "inlineRadio" + id);
+    label.textContent = nome;
+
+    div.appendChild(input);
+    div.appendChild(label);
+    APPS.appendChild(div);
+}
+
+carregarAplicativos();
+
 function teste(){
     fetch('/user')
     .then((res) => res.json())
