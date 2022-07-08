@@ -26,6 +26,7 @@ app.use((req, res, next) => {
     console.log(req.url);
     next();
 });
+
 app.use(fileupload());
 app.use(express.json());
 app.use(express.static(__dirname + '/site'));
@@ -34,6 +35,7 @@ app.use(session({
     saveUninitialized: true,
     secret: 'calvo'
 }));
+
 app.use(passport.initialize());
 app.use(passport.session());
 passport.use(new GoogleStrategy({
@@ -56,6 +58,8 @@ passport.deserializeUser((user,done)=>{
     done(null, user)
 });
 
+//colocar no banco de dados o path da imagem?
+//cecchin deu a ideia de criar uma tabela de fotos, com ID da foto, ID do relato e nome da foto, daí ela seria salva numa pasta com o ID do cara, e as fotos poderiam ter qualquer nome
 app.post('/', isLoggedIn, (req, res) =>{
     if (req.files) {
         console.log(req.files)
@@ -75,7 +79,7 @@ app.post('/', isLoggedIn, (req, res) =>{
             res.send("File Uploaded")
         }
     })
-})
+});
 
 app.get('/', (req, res) => {
     res.header('Content-Type', 'text/html');
@@ -88,11 +92,15 @@ app.get('/', (req, res) => {
     });
 });
 
+app.get('/app', isLoggedIn, async (req, res) => {
+    res.send(await database.getAplicativos());
+});
+
 app.get('/imagem', isLoggedIn, (req, res) =>{
-    let foto = '/img/' + req.user.id + ".png";
+    let foto = '/img/' + req.user.id + ".jpg";
     console.log(foto);
     res.send([{foto: foto}]);
-})
+});
 
 app.get('/login', (req, res) => {
     res.header('Content-Type', 'text/html');
@@ -138,7 +146,7 @@ app.get('/user', (req, res) =>{
 });
 
 app.get('/inicio', isLoggedIn, (req, res) =>{
-    // if (req.user.id == "113860311129940378030"){     //pra deixar uma página de admin!!!!!
+    // if (req.user.id == "113860311129940378030"){                      //pra deixar uma página de admin!!!!!
     // res.header('Content-Type', 'text/html');
     // res.sendFile(__dirname + '/site/views/erro.html', function(err){
     //     if (err) {

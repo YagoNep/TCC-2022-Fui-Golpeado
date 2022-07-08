@@ -43,4 +43,10 @@ database.editRelato = async function(titulo, descricao, dia, aplicativo, cidade,
     return {'alterado': id}
 }
 
+database.getAplicativos = async function(){
+    let [rows, fields] = await database.con.execute('SELECT * FROM aplicativo');
+
+    return rows;
+}
+
 export default database;
