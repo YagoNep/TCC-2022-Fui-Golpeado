@@ -27,11 +27,14 @@ function carregarAplicativos(){
         for(const app of res){
         mostrarAplicativos(app.ID_Aplicativo, app.Nome_Aplicativo);
     }
+    var apps = document.getElementById('RadioGroup');
+    var last = apps.lastChild.firstChild;
+    last.checked = true;
     })
 }
 
-function mostrarAplicativos(id, nome){
-    var APPS = document.getElementById('RadioGroup');
+function mostrarAplicativos(id, nome){ //Mudar pra select CECCHINZÃO//Mudar pra select CECCHINZÃO//Mudar pra select CECCHINZÃO//Mudar pra select CECCHINZÃO padronizar
+    var apps = document.getElementById('RadioGroup');
     var div = document.createElement("div");
     div.className = "form-check form-check-inline aplicativo";
     var input = document.createElement("input");
@@ -47,7 +50,8 @@ function mostrarAplicativos(id, nome){
 
     div.appendChild(input);
     div.appendChild(label);
-    APPS.appendChild(div);
+    apps.appendChild(div);
+
 }
 
 carregarAplicativos();
