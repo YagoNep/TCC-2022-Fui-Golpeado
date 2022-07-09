@@ -119,7 +119,7 @@ app.get('/google',
 
 app.get('/google/callback',
     passport.authenticate( 'google', {
-        successRedirect: '/inicio',
+        successRedirect: '/verify',
         failureRedirect: '/google/failure'
     })
 );
@@ -134,6 +134,21 @@ app.get('/google/failure', async (req, res) =>{
     });
 });
 
+app.get('/verify', isLoggedIn, async (req,res) => {
+    const idUser = userProfile.id;
+    let verify = await database.getUsuarioSelecionado(idUser);
+    if(verify == ![]){
+        let cadastrar = await database.cadastraUsuario(idUser);
+        if(cadastrar.numero =! 0){
+            res.redirect('/inicio');
+        }
+        else{res.redirect('/deupau')}
+    }
+    else{
+        res.redirect('/inicio');
+    }
+});
+
 app.get('/logout', (req, res) =>{
     req.logout(function(err){
         if(err) {return next (err);}
@@ -141,7 +156,7 @@ app.get('/logout', (req, res) =>{
     });
 });
 
-app.get('/user', (req, res) =>{
+app.get('/user', isLoggedIn, (req, res) =>{
     res.send(userProfile);
 });
 
