@@ -21,37 +21,39 @@ function mostrarPerfil(res){
 carregarPerfil();
 
 function carregarAplicativos(){
+    const appSelect = document.querySelector("select[name=app]");
+
     fetch('/app')
     .then((res) => res.json())
     .then((res) => {
         for(const app of res){
-        mostrarAplicativos(app.ID_Aplicativo, app.Nome_Aplicativo);
+        // mostrarAplicativos(app.ID_Aplicativo, app.Nome_Aplicativo);
+        appSelect.innerHTML += `<option value='${app.ID_Aplicativo}'>${app.Nome_Aplicativo}</option>`
     }
-    var apps = document.getElementById('RadioGroup');
-    var last = apps.lastChild.firstChild;
-    last.checked = true;
+    // var apps = document.getElementById('RadioGroup');
+    // var last = apps.lastChild.firstChild;
+    // last.checked = true;
     })
 }
 
 function mostrarAplicativos(id, nome){ //Mudar pra select CECCHINZÃO//Mudar pra select CECCHINZÃO//Mudar pra select CECCHINZÃO//Mudar pra select CECCHINZÃO padronizar
-    var apps = document.getElementById('RadioGroup');
-    var div = document.createElement("div");
-    div.className = "form-check form-check-inline aplicativo";
-    var input = document.createElement("input");
-    input.className = "form-check-input";
-    input.setAttribute("type", "radio");
-    input.setAttribute("name", "inlineRadioOptions");
-    input.setAttribute("id", "inlineRadio" + id);
-    input.setAttribute("value", id);
-    var label = document.createElement("label");
-    label.className = "form-check-label aplicativo";
-    label.setAttribute("for", "inlineRadio" + id);
-    label.textContent = nome;
+    // var apps = document.getElementById('RadioGroup');
+    // var div = document.createElement("div");
+    // div.className = "form-check form-check-inline aplicativo";
+    // var input = document.createElement("input");
+    // input.className = "form-check-input";
+    // input.setAttribute("type", "radio");
+    // input.setAttribute("name", "inlineRadioOptions");
+    // input.setAttribute("id", "inlineRadio" + id);
+    // input.setAttribute("value", id);
+    // var label = document.createElement("label");
+    // label.className = "form-check-label aplicativo";
+    // label.setAttribute("for", "inlineRadio" + id);
+    // label.textContent = nome;
 
-    div.appendChild(input);
-    div.appendChild(label);
-    apps.appendChild(div);
-
+    // div.appendChild(input);
+    // div.appendChild(label);
+    // apps.appendChild(div);
 }
 
 carregarAplicativos();
