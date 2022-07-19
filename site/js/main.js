@@ -1,4 +1,4 @@
-document.querySelector('#add').addEventListener("click", teste);
+document.querySelector('#add').addEventListener("click", inserirRelato);
 document.querySelector('#teste4').addEventListener("click", teste2);
 document.querySelector("select[name=uf]").addEventListener("change", getCities)
 
@@ -144,3 +144,31 @@ areaSelect.addEventListener(`change`, (e) => {
   const desc = select.selectedOptions[0].text;
   console.log(value, desc);
 });
+
+
+
+async function inserirRelato(event){
+    event.preventDefault();
+
+    let form = document.querySelector("#relato");
+    let titulo = form.titulo.value;
+    let descricao = form.descricao.value;
+    const APP = document.querySelector("#app");
+    let aplicativo = APP.value;
+    const CIDADE = document.querySelector("#cidades");
+    let cidade = CIDADE.value;
+
+let header = {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json; charset=UTF-8'
+    },
+    body: JSON.stringify({           
+        titulo: titulo,
+        descricao: descricao,
+        aplicativo: aplicativo,
+        cidade: cidade
+    })
+}
+await fetch('/relato', header);
+}

@@ -8,6 +8,7 @@ import session from 'express-session';
 import 'dotenv/config';
 import { profile } from 'console';
 import database from './database.js';
+import fs from "fs";
 
 var userProfile;
 
@@ -62,24 +63,47 @@ passport.deserializeUser((user,done)=>{
 //cecchin deu a ideia de criar uma tabela de fotos, com ID da foto, ID do relato e nome da foto, daí ela seria salva numa pasta com o ID do cara, e as fotos poderiam ter qualquer nome
 app.post('/', isLoggedIn, (req, res) =>{
     if (req.files) {
-        console.log(req.files)
         var file = req.files.file
         var filename = file.name
-        var nome = filename.split(".");
-        var nomerealzao = nome[1];
-        var nomerealzaozao = req.user.id + "." + nomerealzao; 
-        console.log(nomerealzaozao);
+        if (req.files.file.mimetype !== "image/jpg" && req.files.file.mimetype !== "image/png") {
+            throw new Error("Only supports jpg and png file format");
+          }
     }
 
-    file.mv('./site/img/'+nomerealzaozao, function (err) {
+    file.mv('./site/img/' + req.user.id + "/" + filename, function (err) {
         if(err){
             res.send(err)
         }
-        else {
-            res.send("File Uploaded")
-        }
     })
 });
+
+app.post('/relato', isLoggedIn, async (req, res) =>{
+    if (req.files) {
+        var file = req.files.file
+        var filename = file.name
+        if (req.files.file.mimetype !== "image/jpg" && req.files.file.mimetype !== "image/png") {
+            throw new Error("Only supports jpg and png file format");
+        }
+        else{
+            file.mv('./site/img/' + req.user.id + "/" + filename, function (err) {
+            if(err){
+                res.send(err)
+            }
+            })
+        }
+    }
+    let {titulo, descricao, aplicativo, cidade} = req.body;
+    let usuario = req.user.id;
+    let dia = Date.now();
+
+    let date_ob = new Date(dia);
+    let date = date_ob.getDate();
+    let month = date_ob.getMonth() + 1;
+    let year = date_ob.getFullYear();
+
+    let dias = (year + "/" + month + "/" + date);
+    res.status(201).send(await database.insertRelato(titulo, descricao, dias, aplicativo, cidade, usuario))
+})
 
 app.get('/', (req, res) => {
     res.header('Content-Type', 'text/html');
@@ -94,12 +118,6 @@ app.get('/', (req, res) => {
 
 app.get('/app', isLoggedIn, async (req, res) => {
     res.send(await database.getAplicativos());
-});
-
-app.get('/imagem', isLoggedIn, (req, res) =>{
-    let foto = '/img/' + req.user.id + ".jpg";
-    console.log(foto);
-    res.send([{foto: foto}]);
 });
 
 app.get('/login', (req, res) => {
@@ -139,6 +157,13 @@ app.get('/verify', isLoggedIn, async (req,res) => {
     let verify = await database.getUsuarioSelecionado(idUser);
     if(verify == ![]){
         let cadastrar = await database.cadastraUsuario(idUser);
+        fs.mkdir("./site/img/"+ idUser, { recursive: true }, function(err){
+            if (err) {
+                console.log(err)
+              } else {
+                console.log("New directory successfully created.")
+              }
+        });
         if(cadastrar.numero =! 0){
             res.redirect('/inicio');
         }
