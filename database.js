@@ -61,4 +61,16 @@ database.cadastraUsuario = async function(id){
     return {'numero': data.insertId}
 }
 
+database.cadastraCidade = async function(id, nome, estado){
+    let [data] = await database.con.execute('INSERT INTO cidade (ID_Cidade, Nome_Cidade, fk_ID_Estado) VALUES (?, ?, ?)', [id, nome, estado]);
+
+    return {'numero': data.insertId}
+}
+
+database.getCidadeSelecionada = async function(id){
+    let [rows, fields] = await database.con.execute('SELECT * FROM cidade WHERE ID_Cidade = ?', [id]);
+
+    return rows;
+}
+
 export default database;

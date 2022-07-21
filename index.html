@@ -10,8 +10,8 @@
     <body>
       <!-- https://getbootstrap.com/docs/5.2/components/offcanvas/ pra ajudar quando tiver responsivo-->
       <header>
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark text-light ">
-          <div class="container-fluid">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark text-light bg-opacity-75">
+          <div class="container-fluid opacity-100">
             <a class="navbar-brand me-3">Fui Golpeado</a>
             <a class="d-flex me-3 text-decoration-none">
               <span class="navbar-text text-light" id="nomePerfil"></span>
@@ -62,7 +62,7 @@
                     <label for="arquivo" class="h5 mt-3">Imagem</label>
                     <div id="arquivo">
                       <form method="POST" action="/" enctype="multipart/form-data">
-                        <input type="file" class="form-control" name="file"/>
+                        <input type="file" class="form-control" accept="image/*" name="file"/>
                         <input type="submit" class="btn btn-success mt-3" value="Upload"/>
                       </form>
                     </div>

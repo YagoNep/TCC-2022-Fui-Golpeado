@@ -9,6 +9,7 @@ import 'dotenv/config';
 import { profile } from 'console';
 import database from './database.js';
 import fs from "fs";
+import fetch from "node-fetch";
 
 var userProfile;
 
@@ -102,7 +103,27 @@ app.post('/relato', isLoggedIn, async (req, res) =>{
     let year = date_ob.getFullYear();
 
     let dias = (year + "/" + month + "/" + date);
-    res.status(201).send(await database.insertRelato(titulo, descricao, dias, aplicativo, cidade, usuario))
+    let deucerto = false;
+
+    let verify = await database.getCidadeSelecionada(cidade);
+    if(verify == ![]){
+        let estado = cidade.substr(0,2);
+        const link = `https://servicodados.ibge.gov.br/api/v1/localidades/estados/${estado}/municipios`
+
+        await fetch(link)
+        .then( res => res.json() )
+        .then( cities => {
+            for ( const city of cities ) {
+                if(cidade == city.id){
+                    database.cadastraCidade(cidade, city.nome, estado);
+                    deucerto = true;
+                }
+            }
+        })
+    }
+    if(deucerto){
+        res.status(201).send(await database.insertRelato(titulo, descricao, dias, aplicativo, cidade, usuario))
+    }
 })
 
 app.get('/', (req, res) => {

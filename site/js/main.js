@@ -171,4 +171,6 @@ let header = {
     })
 }
 await fetch('/relato', header);
+
+// window.location.href = '/trolei';
 }
