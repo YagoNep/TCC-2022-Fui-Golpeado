@@ -6,7 +6,9 @@ import passport from 'passport';
 import GoogleStrategy from 'passport-google-oauth2';
 import session from 'express-session';
 import 'dotenv/config';
-import { profile } from 'console';
+import {
+    profile
+} from 'console';
 import database from './database.js';
 import fs from "fs";
 import fetch from "node-fetch";
@@ -19,7 +21,8 @@ function isLoggedIn(req, res, next) {
 }
 
 const app = express();
-var __filename = url.fileURLToPath(import.meta.url);
+var __filename = url.fileURLToPath(
+    import.meta.url);
 var __dirname = path.dirname(__filename);
 
 app.listen(8080, () => console.log('Servidor rodando!'));
@@ -33,7 +36,7 @@ app.use(fileupload());
 app.use(express.json());
 app.use(express.static(__dirname + '/site'));
 app.use(session({
-    resave:false,
+    resave: false,
     saveUninitialized: true,
     secret: 'calvo'
 }));
@@ -41,59 +44,52 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 passport.use(new GoogleStrategy({
-    clientID:     process.env.clientID,
-    clientSecret: process.env.clientSecret,
-    callbackURL: "http://localhost:8080/google/callback",
-    passReqToCallback   : true
-  },
-  function(request, accessToken, refreshToken, profile, done) {
-    userProfile = profile;
-    return done(null, userProfile);
-  }
+        clientID: process.env.clientID,
+        clientSecret: process.env.clientSecret,
+        callbackURL: "http://localhost:8080/google/callback",
+        passReqToCallback: true
+    },
+    function (request, accessToken, refreshToken, profile, done) {
+        userProfile = profile;
+        return done(null, userProfile);
+    }
 ));
 
-passport.serializeUser((user, done) =>{
+passport.serializeUser((user, done) => {
     done(null, user)
 });
 
-passport.deserializeUser((user,done)=>{
+passport.deserializeUser((user, done) => {
     done(null, user)
 });
 
 //colocar no banco de dados o path da imagem?
 //cecchin deu a ideia de criar uma tabela de fotos, com ID da foto, ID do relato e nome da foto, daí ela seria salva numa pasta com o ID do cara, e as fotos poderiam ter qualquer nome
-app.post('/', isLoggedIn, (req, res) =>{
+app.post('/', isLoggedIn, (req, res) => {
     if (req.files) {
         var file = req.files.file
         var filename = file.name
         if (req.files.file.mimetype !== "image/jpg" && req.files.file.mimetype !== "image/png") {
             throw new Error("Only supports jpg and png file format");
-          }
+        }
     }
 
     file.mv('./site/img/' + req.user.id + "/" + filename, function (err) {
-        if(err){
+        if (err) {
             res.send(err)
         }
     })
 });
 
-app.post('/relato', isLoggedIn, async (req, res) =>{
-    if (req.files) {
-        var file = req.files.file
-        var filename = file.name
-        if (req.files.file.mimetype !== "image/jpg" && req.files.file.mimetype !== "image/png") {
-            throw new Error("Only supports jpg and png file format");
-        }
-        else{
-            file.mv('./site/img/' + req.user.id + "/" + filename, function (err) {
-            if(err){
-                res.send(err)
-            }
-            })
-        }
-    }
-    let {titulo, descricao, aplicativo, cidade} = req.body;
+app.post('/relato', isLoggedIn, async (req, res) => {
+    let {
+        titulo,
+        descricao,
+        app,
+        uf,
+        state,
+        city
+    } = req.body;
     let usuario = req.user.id;
     let dia = Date.now();
 
@@ -105,30 +101,54 @@ app.post('/relato', isLoggedIn, async (req, res) =>{
     let dias = (year + "/" + month + "/" + date);
     let deucerto = false;
 
-    let verify = await database.getCidadeSelecionada(cidade);
-    if(verify == ![]){
-        let estado = cidade.substr(0,2);
-        const link = `https://servicodados.ibge.gov.br/api/v1/localidades/estados/${estado}/municipios`
+    console.log(city);
+    let verify = await database.getCidadeSelecionada(city);
+    if (verify == ![]) {
+        const link = `https://servicodados.ibge.gov.br/api/v1/localidades/estados/${uf}/municipios`
 
         await fetch(link)
-        .then( res => res.json() )
-        .then( cities => {
-            for ( const city of cities ) {
-                if(cidade == city.id){
-                    database.cadastraCidade(cidade, city.nome, estado);
-                    deucerto = true;
+            .then(res => res.json())
+            .then(cities => {
+                for (const cityf of cities) {
+                    if (city == cityf.id) {
+                        database.cadastraCidade(city, cityf.nome, uf);
+                        deucerto = true;
+                    }
                 }
-            }
-        })
+            })
+    } else {
+        deucerto = true;
     }
-    if(deucerto){
-        res.status(201).send(await database.insertRelato(titulo, descricao, dias, aplicativo, cidade, usuario))
+    if (deucerto) {
+        descricao = descricao.replace(/\r/g, " ");
+        descricao = descricao.replace(/\n/g, " ");
+        // descricao = descricao.replace(/ {2, }/g, " "); dar um jeito de dar replace quando tiver mais de um espaço junto
+        let numero = await database.insertRelato(titulo, descricao, dias, app, city, usuario)
+        if (req.files) {
+            fs.mkdir("./site/img/" + usuario + "/" + numero.numero, {
+                recursive: true
+            }, function (err) {
+                if (err) {
+                    res.send(err);
+                }
+            });
+            var file = req.files.file
+            var filename = file.name
+            file.mv('./site/img/' + req.user.id + "/" + numero.numero + "/" + filename, function (err) {
+                if (err) {
+                    res.send(err)
+                }
+            })
+            await database.cadastraImagem(filename, numero.numero);
+        }
+        let vars = await database.getRelatoSelecionado(numero.numero);
+        res.status(201).send(vars);
     }
 })
 
 app.get('/', (req, res) => {
     res.header('Content-Type', 'text/html');
-    res.sendFile(__dirname + '/site/views/login.html', function(err){
+    res.sendFile(__dirname + '/site/views/login.html', function (err) {
         if (err) {
             return res.status(err.status).end();
         } else {
@@ -143,7 +163,7 @@ app.get('/app', isLoggedIn, async (req, res) => {
 
 app.get('/login', (req, res) => {
     res.header('Content-Type', 'text/html');
-    res.sendFile(__dirname + '/site/views/login.html', function(err){
+    res.sendFile(__dirname + '/site/views/login.html', function (err) {
         if (err) {
             return res.status(err.status).end();
         } else {
@@ -153,18 +173,19 @@ app.get('/login', (req, res) => {
 });
 
 app.get('/google',
-    passport.authenticate('google', { scope: ['email', 'profile'] }
-));
+    passport.authenticate('google', {
+        scope: ['email', 'profile']
+    }));
 
 app.get('/google/callback',
-    passport.authenticate( 'google', {
+    passport.authenticate('google', {
         successRedirect: '/verify',
         failureRedirect: '/google/failure'
     })
 );
 
-app.get('/google/failure', async (req, res) =>{
-    res.send("Deu errado!", function(err){
+app.get('/google/failure', async (req, res) => {
+    res.send("Deu errado!", function (err) {
         if (err) {
             return res.status(err.status).end();
         } else {
@@ -173,40 +194,44 @@ app.get('/google/failure', async (req, res) =>{
     });
 });
 
-app.get('/verify', isLoggedIn, async (req,res) => {
+app.get('/verify', isLoggedIn, async (req, res) => {
     const idUser = userProfile.id;
     let verify = await database.getUsuarioSelecionado(idUser);
-    if(verify == ![]){
+    if (verify == ![]) {
         let cadastrar = await database.cadastraUsuario(idUser);
-        fs.mkdir("./site/img/"+ idUser, { recursive: true }, function(err){
+        fs.mkdir("./site/img/" + idUser, {
+            recursive: true
+        }, function (err) {
             if (err) {
                 console.log(err)
-              } else {
+            } else {
                 console.log("New directory successfully created.")
-              }
+            }
         });
-        if(cadastrar.numero =! 0){
+        if (cadastrar.numero = !0) {
             res.redirect('/inicio');
+        } else {
+            res.redirect('/deupau')
         }
-        else{res.redirect('/deupau')}
-    }
-    else{
+    } else {
         res.redirect('/inicio');
     }
 });
 
-app.get('/logout', (req, res) =>{
-    req.logout(function(err){
-        if(err) {return next (err);}
+app.get('/logout', (req, res) => {
+    req.logout(function (err) {
+        if (err) {
+            return next(err);
+        }
         res.redirect('/');
     });
 });
 
-app.get('/user', isLoggedIn, (req, res) =>{
+app.get('/user', isLoggedIn, (req, res) => {
     res.send(userProfile);
 });
 
-app.get('/inicio', isLoggedIn, (req, res) =>{
+app.get('/inicio', isLoggedIn, (req, res) => {
     // if (req.user.id == "113860311129940378030"){                      //pra deixar uma página de admin!!!!!
     // res.header('Content-Type', 'text/html');
     // res.sendFile(__dirname + '/site/views/erro.html', function(err){
@@ -219,7 +244,7 @@ app.get('/inicio', isLoggedIn, (req, res) =>{
     // }
     // else{
     res.header('Content-Type', 'text/html');
-    res.sendFile(__dirname + '/index.html', function(err){
+    res.sendFile(__dirname + '/index.html', function (err) {
         if (err) {
             return res.status(err.status).end();
         } else {
@@ -231,7 +256,7 @@ app.get('/inicio', isLoggedIn, (req, res) =>{
 
 app.get('*', (req, res) => {
     res.header('Content-Type', 'text/html');
-    res.sendFile(__dirname + '/site/views/erro.html', function(err){
+    res.sendFile(__dirname + '/site/views/erro.html', function (err) {
         if (err) {
             return res.status(err.status).end();
         } else {
