@@ -63,8 +63,6 @@ passport.deserializeUser((user, done) => {
     done(null, user)
 });
 
-//colocar no banco de dados o path da imagem?
-//cecchin deu a ideia de criar uma tabela de fotos, com ID da foto, ID do relato e nome da foto, daí ela seria salva numa pasta com o ID do cara, e as fotos poderiam ter qualquer nome
 app.post('/', isLoggedIn, (req, res) => {
     if (req.files) {
         var file = req.files.file
@@ -123,6 +121,7 @@ app.post('/relato', isLoggedIn, async (req, res) => {
         descricao = descricao.replace(/\r/g, " ");
         descricao = descricao.replace(/\n/g, " ");
         descricao = descricao.replace(/  +/g, " ");
+        titulo = titulo.replace(/ +/g, " ");
         let numero = await database.insertRelato(titulo, descricao, dias, app, city, usuario)
         if (req.files) {
             fs.mkdir("./site/img/" + usuario + "/" + numero.numero, {
@@ -132,8 +131,8 @@ app.post('/relato', isLoggedIn, async (req, res) => {
                     res.send(err);
                 }
             });
-            for (let i=0; i<req.files.file.length ; i++){
-                if(i>2){
+            for (let i = 0; i < req.files.file.length; i++) {
+                if (i > 2) {
                     break;
                 }
                 var file = req.files.file[i]
