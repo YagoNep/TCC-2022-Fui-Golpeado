@@ -122,7 +122,7 @@ app.post('/relato', isLoggedIn, async (req, res) => {
     if (deucerto) {
         descricao = descricao.replace(/\r/g, " ");
         descricao = descricao.replace(/\n/g, " ");
-        // descricao = descricao.replace(/ {2, }/g, " "); dar um jeito de dar replace quando tiver mais de um espaço junto
+        descricao = descricao.replace(/  +/g, " ");
         let numero = await database.insertRelato(titulo, descricao, dias, app, city, usuario)
         if (req.files) {
             fs.mkdir("./site/img/" + usuario + "/" + numero.numero, {
@@ -132,14 +132,19 @@ app.post('/relato', isLoggedIn, async (req, res) => {
                     res.send(err);
                 }
             });
-            var file = req.files.file
-            var filename = file.name
-            file.mv('./site/img/' + req.user.id + "/" + numero.numero + "/" + filename, function (err) {
-                if (err) {
-                    res.send(err)
+            for (let i=0; i<req.files.file.length ; i++){
+                if(i>2){
+                    break;
                 }
-            })
-            await database.cadastraImagem(filename, numero.numero);
+                var file = req.files.file[i]
+                var filename = file.name
+                file.mv('./site/img/' + req.user.id + "/" + numero.numero + "/" + filename, function (err) {
+                    if (err) {
+                        res.send(err)
+                    }
+                })
+                await database.cadastraImagem(filename, numero.numero);
+            }
         }
         let vars = await database.getRelatoSelecionado(numero.numero);
         res.status(201).send(vars);
