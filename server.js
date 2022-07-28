@@ -165,9 +165,20 @@ app.post('/relato', isLoggedIn, async (req, res) => {
             }
         }
         let vars = await database.getRelatoSelecionado(numero.numero);
-        res.status(201).send(vars);
+        res.status(201).redirect('/teste');
     }
 })
+
+app.get('/teste', isLoggedIn, (req, res) => {
+    res.header('Content-Type', 'text/html');
+    res.sendFile(__dirname + '/site/views/inicio.html', function (err) {
+        if (err) {
+            return res.status(err.status).end();
+        } else {
+            return res.status(200).end();
+        }
+    });
+});
 
 app.get('/', (req, res) => {
     res.header('Content-Type', 'text/html');
@@ -182,6 +193,10 @@ app.get('/', (req, res) => {
 
 app.get('/app', isLoggedIn, async (req, res) => {
     res.send(await database.getAplicativos());
+});
+
+app.get('/relatos', isLoggedIn, async (req, res) => {
+    res.send(await database.getRelatos());
 });
 
 app.get('/login', (req, res) => {
