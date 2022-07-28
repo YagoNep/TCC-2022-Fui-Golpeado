@@ -1,7 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="h-100">
 
 <head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Página do Relato</title>
   <script src="https://kit.fontawesome.com/d488c740e1.js" crossorigin="anonymous"></script>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
@@ -12,10 +16,10 @@
   <link rel="stylesheet" href="/css/style.css">
 </head>
 
-<body>
+<body class="h-100">
   <!-- https://getbootstrap.com/docs/5.2/components/offcanvas/ pra ajudar quando tiver responsivo-->
   <header>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark text-light bg-opacity-75">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark text-light bg-opacity-75 mb-3">
       <div class="container-fluid opacity-100">
         <a class="navbar-brand me-3">Fui Golpeado</a>
         <a class="d-flex me-3 text-decoration-none">
@@ -25,9 +29,9 @@
       </div>
     </nav>
   </header>
-  <form id="relato" method="POST" action="/relato" enctype="multipart/form-data">
-    <div class="container">
-      <div class="m-5 p-5 text-dark bg-light bg-opacity-75 rounded-3 d-flex flex-column">
+  <div class="container">
+    <form id="relato" method="POST" action="/relato" enctype="multipart/form-data">
+      <div class="p-5 text-dark bg-light bg-opacity-75 rounded-3 d-flex flex-column m-auto h-100">
         <h1 class="text-primary mx-auto"><i class="fa-solid fa-scroll"></i> <b> Relato do Golpe</b></h1>
         <div class="form-outline mb-3">
           <label class="form-label h5" for="loginName">Título do Golpe</label>
@@ -67,13 +71,12 @@
         </fieldset>
         <label for="arquivo" class="h5 mt-3">Imagem</label>
         <div id="arquivo">
-          <input type="file" class="form-control" accept="image/*" name="file" multiple/>
+          <input type="file" class="form-control" accept="image/*" name="file" multiple />
         </div>
-        <button type="submit" class="btn btn-primary mx-auto mt-3 p-3 shadow-lg border border-dark"
-          id="add2">Registrar</button>
+        <button type="submit" class="btn btn-primary mx-auto mt-3 p-3 shadow-lg" id="add2">Registrar</button>
       </div>
-    </div>
-  </form>
+    </form>
+  </div>
 </body>
 
 </html>

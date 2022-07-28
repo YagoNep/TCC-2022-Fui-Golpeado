@@ -124,18 +124,15 @@ app.post('/relato', isLoggedIn, async (req, res) => {
         titulo = titulo.replace(/ +/g, " ");
         let numero = await database.insertRelato(titulo, descricao, dias, app, city, usuario)
         if (req.files) {
-            fs.mkdir("./site/img/" + usuario + "/" + numero.numero, {
-                recursive: true
-            }, function (err) {
-                if (err) {
-                    res.send(err);
-                }
-            });
-            for (let i = 0; i < req.files.file.length; i++) {
-                if (i > 2) {
-                    break;
-                }
-                var file = req.files.file[i]
+            if (req.files.file.length == undefined) {
+                fs.mkdir("./site/img/" + usuario + "/" + numero.numero, {
+                    recursive: true
+                }, function (err) {
+                    if (err) {
+                        res.send(err);
+                    }
+                });
+                var file = req.files.file
                 var filename = file.name
                 file.mv('./site/img/' + req.user.id + "/" + numero.numero + "/" + filename, function (err) {
                     if (err) {
@@ -143,6 +140,28 @@ app.post('/relato', isLoggedIn, async (req, res) => {
                     }
                 })
                 await database.cadastraImagem(filename, numero.numero);
+            }
+            if (req.files.file.length) {
+                fs.mkdir("./site/img/" + usuario + "/" + numero.numero, {
+                    recursive: true
+                }, function (err) {
+                    if (err) {
+                        res.send(err);
+                    }
+                });
+                for (let i = 0; i < req.files.file.length; i++) {
+                    if (i > 2) {
+                        break;
+                    }
+                    var file = req.files.file[i]
+                    var filename = file.name
+                    file.mv('./site/img/' + req.user.id + "/" + numero.numero + "/" + filename, function (err) {
+                        if (err) {
+                            res.send(err)
+                        }
+                    })
+                    await database.cadastraImagem(filename, numero.numero);
+                }
             }
         }
         let vars = await database.getRelatoSelecionado(numero.numero);
