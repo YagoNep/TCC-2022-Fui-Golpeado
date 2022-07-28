@@ -1,0 +1,9 @@
+  body {
+      background-image: url("/img/teste.jpg");
+      background-repeat: no-repeat;
+      background-attachment: scroll;
+      background-size: cover;
+      min-height: 500px;
+      background-attachment: fixed;
+      background-position: center;
+  }
