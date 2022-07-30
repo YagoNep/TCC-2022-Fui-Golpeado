@@ -199,6 +199,21 @@ app.get('/relatos', isLoggedIn, async (req, res) => {
     res.send(await database.getRelatos());
 });
 
+app.get('/relatosimg', isLoggedIn, async (req, res) => {
+    let relatos = await database.getRelatos();
+    let b = "b";
+    let c = [];
+    for(let i=1; i<=relatos.length; i++){
+        let a = await database.getImagensSelecionadas(i);
+        if(a != ![]){
+            c.push(a);
+        }
+    }
+    // console.log(c[1])
+    // console.log(c[1][1].Nome_Imagem)
+    res.send(c);
+});
+
 app.get('/login', (req, res) => {
     res.header('Content-Type', 'text/html');
     res.sendFile(__dirname + '/site/views/login.html', function (err) {

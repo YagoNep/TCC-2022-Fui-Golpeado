@@ -55,6 +55,18 @@ database.getAplicativos = async function () {
     return rows;
 }
 
+database.getImagens = async function () {
+    let [rows, fields] = await database.con.execute('SELECT * FROM imagem');
+
+    return rows;
+}
+
+database.getImagensSelecionadas = async function (id) {
+    let [rows, fields] = await database.con.execute('SELECT * FROM imagem WHERE fk_ID_Relato = ?', [id]);
+
+    return rows;
+}
+
 database.getUsuarioSelecionado = async function (id) {
     let [rows, fields] = await database.con.execute('SELECT * FROM usuario WHERE ID_Usuario = ?', [id]);
 
