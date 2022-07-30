@@ -1,4 +1,21 @@
-let auxpagina = 0;
+let auxpagina = 6;
+let auxit = 0
+let auxrelatos = [];
+
+async function carregarRelatos() {
+    fetch('/relatos')
+    .then((res) => res.json())
+    .then((res) => {
+        auxrelatos = res;
+        mostrarRelatos();})
+}
+
+// async function carregarRelatos() {
+//     fetch('/relatosimg')
+//     .then((res) => res.json()) //colocar width:100%, height:28rem (exemplo) e object-fit: cover; na imagem, alem de setar o height e width na tag img, qualquer coisa pega exemplo diferente no https://buscaportas.com.br/empresas/inffino-marcenaria/
+//     .then((res) => {
+//         console.log(res)})
+// }
 
 function carregarPerfil() {
     fetch('/user')
@@ -17,28 +34,21 @@ function mostrarPerfil(res) {
 
 carregarPerfil();
 
-// function iterarRelatos(){
-//     fetch('/relatos')
-//     .then((res) => res.json())
-//     return await res;
-// }
-
-function carregarrelatos(){ /////dar um jeito de arrumar essa merda mostrar só uns 10 por vez
-
-    fetch('/relatos')
-    .then((res) => res.json())
-    .then((res) => {
-        var aux = res;
-        var aux1 = 0;
-        
-            for(const relato of aux){
-                for (let i = aux1; i < 20; i++){
-                    criarcard(relato.ID_Relato, relato.Titulo, relato.Descricao);
-            }
-            aux1+20;
-    }}
-    )
+async function mostrarRelatos(){
     
+    for(let i=auxit; i<auxpagina; i++){
+        if(i<auxrelatos.length){
+        console.log(auxrelatos[i]);
+        criarcard(auxrelatos[i].ID_Relato, auxrelatos[i].Titulo, auxrelatos[i].Descricao);
+        auxit++;
+        }
+}
+        auxpagina+=6;
+}
+
+async function mostrarTodosRelatos(){
+        auxpagina = auxrelatos.length;
+        mostrarRelatos();
 }
 
 function criarcard(id, titulo, descricao){
@@ -68,4 +78,6 @@ card.appendChild(card1);
 document.getElementById("teste").appendChild(card)
 }
 
-carregarrelatos();
+carregarRelatos();
+document.querySelector("#plus").addEventListener("click", mostrarRelatos);
+document.querySelector("#all").addEventListener("click", mostrarTodosRelatos);
