@@ -24,3 +24,9 @@ body{
 .paginas {
   text-align-last: center;
 }
+.fotinha{
+  height: 20rem;
+  object-fit: cover;
+  object-position: center;
+  border-radius: 3%;
+}

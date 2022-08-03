@@ -122,11 +122,8 @@ app.post('/relato', isLoggedIn, async (req, res) => {
         descricao = descricao.replace(/\n/g, " ");
         descricao = descricao.replace(/  +/g, " ");
         titulo = titulo.replace(/ +/g, " ");
-        let ilustrado = 0;
-        let numero = 1;
+        let numero = await database.insertRelato(titulo, descricao, dias, app, city, usuario);
         if (req.files) {
-            ilustrado = 1;
-            numero = await database.insertRelato(titulo, descricao, dias, app, city, usuario, ilustrado)
             if (req.files.file.length == undefined) {
                 fs.mkdir("./site/img/" + usuario + "/" + numero.numero, {
                     recursive: true
@@ -166,9 +163,6 @@ app.post('/relato', isLoggedIn, async (req, res) => {
                     await database.cadastraImagem(filename, numero.numero);
                 }
             }
-        }
-        else{
-            numero = await database.insertRelato(titulo, descricao, dias, app, city, usuario, ilustrado);
         }
         let vars = await database.getRelatoSelecionado(numero.numero);
         res.status(201).redirect('/teste');
@@ -210,7 +204,7 @@ app.get('/app', isLoggedIn, async (req, res) => {
 });
 
 app.get('/relatos', isLoggedIn, async (req, res) => {
-    res.send(await database.getRelatos());
+    res.send(await database.getRelatosImg());
 });
 
 app.get('/relatosimg', isLoggedIn, async (req, res) => {

@@ -30,9 +30,9 @@ database.getRelatoSelecionado = async function (id) {
     return rows;
 }
 
-database.insertRelato = async function (titulo, descricao, dia, aplicativo, cidade, usuario, ilustrado) {
-    let [data] = await database.con.execute('INSERT INTO relato (Titulo, Descricao, Data, fk_ID_Aplicativo, fk_ID_Cidade, fk_ID_Usuario, Ilustrado) VALUES (?, ?, ?, ?, ?, ?, ?)',
-        [titulo, descricao, dia, aplicativo, cidade, usuario, ilustrado]);
+database.insertRelato = async function (titulo, descricao, dia, aplicativo, cidade, usuario) {
+    let [data] = await database.con.execute('INSERT INTO relato (Titulo, Descricao, Data, fk_ID_Aplicativo, fk_ID_Cidade, fk_ID_Usuario) VALUES (?, ?, ?, ?, ?, ?)',
+        [titulo, descricao, dia, aplicativo, cidade, usuario]);
 
     return {
         'numero': data.insertId
