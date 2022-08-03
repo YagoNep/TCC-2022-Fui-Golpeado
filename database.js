@@ -18,15 +18,21 @@ database.getRelatos = async function () {
     return rows;
 }
 
+database.getRelatosImg = async function () {
+    let [rows, fields] = await database.con.execute('SELECT r.*, GROUP_CONCAT(i.Nome_Imagem) AS imagens FROM imagem AS i RIGHT JOIN relato as r ON i.fk_ID_Relato = r.ID_Relato GROUP BY r.ID_Relato ORDER BY imagens desc');
+
+    return rows;
+}
+
 database.getRelatoSelecionado = async function (id) {
     let [rows, fields] = await database.con.execute('SELECT * FROM relato WHERE ID_Relato = ?', [id]);
 
     return rows;
 }
 
-database.insertRelato = async function (titulo, descricao, dia, aplicativo, cidade, usuario) {
-    let [data] = await database.con.execute('INSERT INTO relato (Titulo, Descricao, Data, fk_ID_Aplicativo, fk_ID_Cidade, fk_ID_Usuario) VALUES (?, ?, ?, ?, ?, ?)',
-        [titulo, descricao, dia, aplicativo, cidade, usuario]);
+database.insertRelato = async function (titulo, descricao, dia, aplicativo, cidade, usuario, ilustrado) {
+    let [data] = await database.con.execute('INSERT INTO relato (Titulo, Descricao, Data, fk_ID_Aplicativo, fk_ID_Cidade, fk_ID_Usuario, Ilustrado) VALUES (?, ?, ?, ?, ?, ?, ?)',
+        [titulo, descricao, dia, aplicativo, cidade, usuario, ilustrado]);
 
     return {
         'numero': data.insertId

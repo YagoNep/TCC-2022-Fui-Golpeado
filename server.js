@@ -122,8 +122,11 @@ app.post('/relato', isLoggedIn, async (req, res) => {
         descricao = descricao.replace(/\n/g, " ");
         descricao = descricao.replace(/  +/g, " ");
         titulo = titulo.replace(/ +/g, " ");
-        let numero = await database.insertRelato(titulo, descricao, dias, app, city, usuario)
+        let ilustrado = 0;
+        let numero = 1;
         if (req.files) {
+            ilustrado = 1;
+            numero = await database.insertRelato(titulo, descricao, dias, app, city, usuario, ilustrado)
             if (req.files.file.length == undefined) {
                 fs.mkdir("./site/img/" + usuario + "/" + numero.numero, {
                     recursive: true
@@ -164,10 +167,21 @@ app.post('/relato', isLoggedIn, async (req, res) => {
                 }
             }
         }
+        else{
+            numero = await database.insertRelato(titulo, descricao, dias, app, city, usuario, ilustrado);
+        }
         let vars = await database.getRelatoSelecionado(numero.numero);
         res.status(201).redirect('/teste');
     }
 })
+
+app.get('/relatoselect/:id', isLoggedIn, async (req, res) => {
+    res.send(await database.getRelatoSelecionado(req.params.id));
+});
+
+app.get('/relatosimg', isLoggedIn, async (req, res) => {
+    res.send(await database.getRelatosImg());
+});
 
 app.get('/teste', isLoggedIn, (req, res) => {
     res.header('Content-Type', 'text/html');
@@ -201,7 +215,6 @@ app.get('/relatos', isLoggedIn, async (req, res) => {
 
 app.get('/relatosimg', isLoggedIn, async (req, res) => {
     let relatos = await database.getRelatos();
-    let b = "b";
     let c = [];
     for(let i=1; i<=relatos.length; i++){
         let a = await database.getImagensSelecionadas(i);
