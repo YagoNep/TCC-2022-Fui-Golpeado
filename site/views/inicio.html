@@ -12,6 +12,7 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous">
   </script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
   <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
   <script src="/js/inicio.js" defer></script>
   <link rel="stylesheet" href="/css/inicio.css">
@@ -22,11 +23,18 @@
   <header>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark text-light fixed-top">
       <div class="container-fluid opacity-100">
-        <a class="navbar-brand me-3">Fui Golpeado</a>
-        <a class="d-flex me-3 text-decoration-none">
-          <span class="navbar-text text-light" id="nomePerfil"></span>
-          <img id="fotoPerfil" src="" alt="" width="40" height="40" referrerpolicy="no-referrer" class="ms-2 p-1">
-        </a>
+        <a class="navbar-brand ms-4">Fui Golpeado</a>
+        <div class="d-flex me-4 text-decoration-none">
+          <span class="navbar-text text-light mt-1" id="nomePerfil"></span>
+          <div class="dropdown">
+          <img id="fotoPerfil" type="button" data-bs-toggle="dropdown" aria-expanded="false" src="" alt="" width="45" height="45" referrerpolicy="no-referrer" class="ms-2 bg-transparent p-1 btn btn-secondary dropdown-toggle">
+          <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark">
+            <li><a class="dropdown-item" href="#">Meu Perfil</a></li>
+            <li><a class="dropdown-item" href="/inicio">Registrar Relato</a></li>
+            <li><a class="dropdown-item" href="/logout"><i class="bi bi-box-arrow-right"></i> Logout</a></li>
+          </ul>
+        </div>
+      </div>
       </div>
     </nav>
     <div id="intro" class="p-5 text-center bg-dark text-light bg-opacity-75">
