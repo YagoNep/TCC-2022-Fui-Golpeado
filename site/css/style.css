@@ -1,3 +1,14 @@
+#intro {
+    /* Margin to fix overlapping fixed navbar */
+    margin-top: 55px;
+  }
+  @media (max-width: 991px) {
+    #intro {
+      /* Margin to fix overlapping fixed navbar */
+      margin-top: 45px;
+    }
+  }
+
 img{
     border-radius: 50%;
 }
@@ -13,4 +24,8 @@ body{
 
 #navbar{
     opacity:0.75;
+}
+
+#fotoPerfil{
+    border-radius: 50%;
 }
