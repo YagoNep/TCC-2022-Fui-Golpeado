@@ -30,3 +30,12 @@ body{
   object-position: center;
   border-radius: 3%;
 }
+.modal-title{
+  overflow-wrap: anywhere;
+}
+.filme{
+  text-align: justify;
+}
+.modal img{
+  width:50%;
+}

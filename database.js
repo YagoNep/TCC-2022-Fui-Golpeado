@@ -25,7 +25,7 @@ database.getRelatosImg = async function () {
 }
 
 database.getRelatoSelecionado = async function (id) {
-    let [rows, fields] = await database.con.execute('SELECT * FROM relato WHERE ID_Relato = ?', [id]);
+    let [rows, fields] = await database.con.execute('SELECT r.*, GROUP_CONCAT(i.Nome_Imagem) AS imagens FROM imagem AS i RIGHT JOIN relato as r ON i.fk_ID_Relato = r.ID_Relato WHERE r.ID_Relato = ?', [id]);
 
     return rows;
 }

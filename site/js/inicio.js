@@ -137,48 +137,80 @@ function criarcardImg(id, titulo, descricao, imagem){
     document.getElementById("teste").appendChild(card)
     }
 
-function chamarModal(){
+async function chamarModal(){
     document.getElementById("img").style.opacity = "1";
-    let id = 7;
+    let id = this.getAttribute("id");
     let modal = document.getElementById("staticBackdrop");
     let image = modal.querySelector(".modal img");
+    image.remove();
     let titulo = modal.querySelector(".modal h3");
-    let filme = modal.querySelector(".modal .filme");
-    let filmecurto = modal.querySelector(".modal .filmecurto");
-    let tvshow = modal.querySelector(".modal .tvshow");
+    let descricao = modal.querySelector(".modal .descricao");
+    let aplicativo = modal.querySelector(".modal .aplicativo");
+    let cidade = modal.querySelector(".modal .cidade");
     let game = modal.querySelector(".modal .game");
     let park = modal.querySelector(".modal .park");
     let allies = modal.querySelector(".modal .allies");
     let enemies = modal.querySelector(".modal .enemies");
     let url = `https://api.disneyapi.dev/characters/${id}`;
-    fetch(url)
+    let cidade2 = "a"
+    await fetch("/relatoselect/" + id)
     .then((res) => res.json())
     .then((res) => {
-      image.setAttribute("src", res.imageUrl);
-      titulo.textContent = "#" + res._id + " - " + res.name;
-      filme.textContent = "• Filmes: " + tratarArray(res.films);
-      filmecurto.textContent = "• Curtametragens: " + tratarArray(res.shortFilms);
-      tvshow.textContent = "• TV Shows: " + tratarArray(res.tvShows);
-      game.textContent = "• Games: " + tratarArray(res.videoGames);
-      park.textContent = "• Atrações: " + tratarArray(res.parkAttractions);
-      allies.textContent = "• Aliados: " + tratarArray(res.allies);
-      enemies.textContent = "• Inimigos: " + tratarArray(res.enemies);
+        cidade2 = res[0].fk_ID_Cidade;
+        let auxapp = "Indefinido"
+        if(res[0].fk_ID_Aplicativo == 1){
+            auxapp = "Whatsapp";
+        }
+        if(res[0].fk_ID_Aplicativo == 2){
+            auxapp = "Facebook";
+        }
+        if(res[0].fk_ID_Aplicativo == 3){
+            auxapp = "Instagram";
+        }
+        if(res[0].fk_ID_Aplicativo == 4){
+            auxapp = "Twitter";
+        }
+        if(res[0].fk_ID_Aplicativo == 5){
+            auxapp = "Email";
+        }
+        if(res[0].fk_ID_Aplicativo == 6){
+            auxapp = "Compras online";
+        }
+        if(res[0].fk_ID_Aplicativo == 7){
+            auxapp = "Outros";
+        }
+        let imagens = res[0].imagens.split(",");
+        for(let i = 0; i<imagens.length; i++){
+        let imagempath = './img/' + res[0].fk_ID_Usuario + "/" + res[0].ID_Relato + "/" + imagens[i];
+        var imagem = document.createElement("img");
+        imagem.setAttribute("id", "img");
+        imagem.className = "d-inline-block float-start me-3 mb-1 mt-1";
+        imagem.setAttribute("src", imagempath);
+
+        document.getElementById("corpomodal").appendChild(imagem);
+        }
+        titulo.textContent = res[0].Titulo;
+        descricao.textContent = "• " + res[0].Descricao;
+        aplicativo.textContent = "• Aplicativo: " + auxapp;
+
+    //   filmecurto.textContent = "• Curtametragens: " + tratarArray(res.shortFilms);
+    //   tvshow.textContent = "• TV Shows: " + tratarArray(res.tvShows);
+    //   game.textContent = "• Games: " + tratarArray(res.videoGames);
+    //   park.textContent = "• Atrações: " + tratarArray(res.parkAttractions);
+    //   allies.textContent = "• Aliados: " + tratarArray(res.allies);
+    //   enemies.textContent = "• Inimigos: " + tratarArray(res.enemies);
+      })
+      let cidade1 = "Indefinida";
+      await fetch("/cidadeselect/" + cidade2)
+      .then((resposta) => resposta.json())
+      .then((resposta) =>{
+          cidade1 = resposta[0].Nome_Cidade;
+          cidade.textContent = "• Cidade: " + cidade1;
       })
     .catch(function (err){
       console.log(err);
     })
       
-}
-
-function tratarArray(dado){
-    let retorno = "";
-    if(dado.length == 0){
-        return "N/A";
-    }
-    dado.forEach(function(element, index){
-        retorno += element + (index != dado.length-1 ? ", " : ".");
-    });
-    return retorno;
 }
 
 carregarRelatos();

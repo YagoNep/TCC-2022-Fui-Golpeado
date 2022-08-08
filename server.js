@@ -173,6 +173,10 @@ app.get('/relatoselect/:id', isLoggedIn, async (req, res) => {
     res.send(await database.getRelatoSelecionado(req.params.id));
 });
 
+app.get('/cidadeselect/:id', isLoggedIn, async (req, res) => {
+    res.send(await database.getCidadeSelecionada(req.params.id));
+});
+
 app.get('/relatosimg', isLoggedIn, async (req, res) => {
     res.send(await database.getRelatosImg());
 });
