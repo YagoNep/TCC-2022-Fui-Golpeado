@@ -180,19 +180,22 @@ async function chamarModal(){
         }
 
         if(res[0].imagens){
-            image.remove();
+            // image.remove();
             let imagens = res[0].imagens.split(",");
             for(let i = 0; i<imagens.length; i++){
             let imagempath = './img/' + res[0].fk_ID_Usuario + "/" + res[0].ID_Relato + "/" + imagens[i];
             var imagem = document.createElement("img");
             imagem.setAttribute("id", "img");
             if(i==0){
-                imagem.className = "d-inline-block float-start me-3 mb-1 mt-1 w-100";
+                imagem.className = "d-inline-block float-start me-3 mb-1 mt-1 w-100 grande";
             }
             else{
                 imagem.className = "mt-1 w-50";
             }
+            imagem.setAttribute("data-bs-toggle", "modal");
+            imagem.setAttribute("data-bs-target" , "#exampleModal");
             imagem.setAttribute("src", imagempath);
+            imagem.addEventListener("click", modalImg);
     
             document.getElementById("corpomodal").appendChild(imagem);
             }
@@ -292,5 +295,20 @@ google.charts.setOnLoadCallback(drawChart);
 
         chart.draw(data, options);
       }
+
+function modalImg(){
+    let source = this.getAttribute("src");
+    document.getElementById("imagezona").setAttribute("src", source);
+}
+
+function removeImg(){
+    let element = document.querySelectorAll(".modal1 img");
+    //dar um jeito de tirar todas as img com o queryselector all
+    // Array.prototype.forEach.call( element, function( node ) {
+    //     node.parentNode.removeChild( node );
+    // });
+}
+
+document.querySelector(".btn-close").addEventListener("click", removeImg);
 document.querySelector("#plus").addEventListener("click", mostrarRelatos);
 document.querySelector("#all").addEventListener("click", mostrarTodosRelatos);

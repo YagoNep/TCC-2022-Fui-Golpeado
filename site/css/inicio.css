@@ -36,6 +36,27 @@ body{
 .descricao{
   text-align: justify;
 }
-.modal img{
+.modal1 img{
   width:50%;
+  object-fit: scale-down;
+  max-width: min-content;
+  cursor: pointer;
+}
+.modal2 .modal-content{
+  background-color: transparent;
+}
+.modal2 img{
+  height: 100%;
+  object-fit: cover;
+  width: auto;
+  max-inline-size: -webkit-fill-available;
+  margin: 0 auto;
+}
+.modal-body{
+  display: flex;
+  flex-direction: column;
+  flex-flow: wrap;
+}
+.grande{
+  align-self: center;
 }
