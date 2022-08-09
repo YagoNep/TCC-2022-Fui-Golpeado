@@ -142,7 +142,6 @@ async function chamarModal(){
     let id = this.getAttribute("id");
     let modal = document.getElementById("staticBackdrop");
     let image = modal.querySelector(".modal img");
-    image.remove();
     let titulo = modal.querySelector(".modal h3");
     let descricao = modal.querySelector(".modal .descricao");
     let aplicativo = modal.querySelector(".modal .aplicativo");
@@ -179,15 +178,27 @@ async function chamarModal(){
         if(res[0].fk_ID_Aplicativo == 7){
             auxapp = "Outros";
         }
-        let imagens = res[0].imagens.split(",");
-        for(let i = 0; i<imagens.length; i++){
-        let imagempath = './img/' + res[0].fk_ID_Usuario + "/" + res[0].ID_Relato + "/" + imagens[i];
-        var imagem = document.createElement("img");
-        imagem.setAttribute("id", "img");
-        imagem.className = "d-inline-block float-start me-3 mb-1 mt-1";
-        imagem.setAttribute("src", imagempath);
 
-        document.getElementById("corpomodal").appendChild(imagem);
+        if(res[0].imagens){
+            image.remove();
+            let imagens = res[0].imagens.split(",");
+            for(let i = 0; i<imagens.length; i++){
+            let imagempath = './img/' + res[0].fk_ID_Usuario + "/" + res[0].ID_Relato + "/" + imagens[i];
+            var imagem = document.createElement("img");
+            imagem.setAttribute("id", "img");
+            if(i==0){
+                imagem.className = "d-inline-block float-start me-3 mb-1 mt-1 w-100";
+            }
+            else{
+                imagem.className = "mt-1 w-50";
+            }
+            imagem.setAttribute("src", imagempath);
+    
+            document.getElementById("corpomodal").appendChild(imagem);
+            }
+        }
+        else{
+            image.setAttribute("src", "")
         }
         titulo.textContent = res[0].Titulo;
         descricao.textContent = "• " + res[0].Descricao;
@@ -253,7 +264,7 @@ google.charts.setOnLoadCallback(drawChart);
           ['Twitter', twitter],
           ['Email',    email],
           ['Compras Online', compras]
-        //   ['Outros', outros]
+        // ['Outros', outros]
         ]);
 
         var options = {

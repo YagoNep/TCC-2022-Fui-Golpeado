@@ -79,6 +79,17 @@ app.post('/', isLoggedIn, (req, res) => {
     })
 });
 
+app.get('/relato', (req, res) => {
+    res.header('Content-Type', 'text/html');
+    res.sendFile(__dirname + '/site/views/relato.html', function (err) {
+        if (err) {
+            return res.status(err.status).end();
+        } else {
+            return res.status(200).end();
+        }
+    });
+});
+
 app.post('/relato', isLoggedIn, async (req, res) => {
     let {
         titulo,
@@ -308,7 +319,7 @@ app.get('/inicio', isLoggedIn, (req, res) => {
     // }
     // else{
     res.header('Content-Type', 'text/html');
-    res.sendFile(__dirname + '/index.html', function (err) {
+    res.sendFile(__dirname + '/site/views/inicio.html', function (err) {
         if (err) {
             return res.status(err.status).end();
         } else {
