@@ -68,17 +68,16 @@
     <!-- Modal -->
     <div class="modal fade modal1" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
       aria-labelledby="staticBackdropLabel" aria-hidden="true">
-      <div class="modal-dialog">
+      <div class="modal-dialog modal-lg">
         <div class="modal-content">
           <div class="modal-header">
-            <h3 class="modal-title me-3" id="exampleModalLabel" width="100%">Modal title</h3>
-            <button type="button" class="btn-close me-1" data-bs-dismiss="modal" aria-label="Close"></button>
+            <h3 class="modal-title me-3 text-light" id="exampleModalLabel" width="100%">Modal title</h3>
+            <button type="button" class="btn-close btn-close-white me-1" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body" id="corpomodal">
-            <p class="h6 descricao"></p>
-            <p class="h6 aplicativo w-100"></p>
-            <p class="h6 cidade w-100"></p>
-            <img src="" alt="" srcset="" id="img" class="d-inline-block float-start mt-1" width="50%">
+            <p class="h6 descricao w-100 text-light"></p>
+            <p class="h6 aplicativo w-100 text-light"></p>
+            <p class="h6 cidade w-100 text-light"></p>
           </div>
         </div>
       </div>
@@ -86,8 +85,8 @@
     </div>
     </div>
     <!-- Modal img -->
-    <div class="modal fade modal2" id="exampleModal" tabindex="-1" role="dialog" aria-hidden="true">
-      <div class="modal-dialog modal-xl" data-bs-dismiss="modal" role="document">
+    <div class="modal fade modal2" id="exampleModal" data-bs-target="#staticBackdrop" data-bs-toggle="modal" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog modal-xl" data-bs-target="#staticBackdrop" data-bs-toggle="modal" role="document">
         <div class="modal-content">
           <div class="modal-body">
             <img src="" alt="" srcset="" id="imagezona">
