@@ -33,14 +33,23 @@ body{
 .modal-title{
   overflow-wrap: anywhere;
 }
+.modal-content{
+  padding: 1rem;
+  background-color: #212529;
+}
 .descricao{
   text-align: justify;
+  overflow-wrap: anywhere;
 }
 .modal1 img{
   width:50%;
   object-fit: scale-down;
-  max-width: min-content;
   cursor: pointer;
+  height: 20rem;
+    object-fit: cover;
+    object-position: center;
+    border-radius: 3%;
+    min-width: 50%;
 }
 .modal2 .modal-content{
   background-color: transparent;
@@ -59,4 +68,8 @@ body{
 }
 .grande{
   align-self: center;
+}
+.btn-close {
+  color: #fff!important; 
+  opacity: 1;
 }
