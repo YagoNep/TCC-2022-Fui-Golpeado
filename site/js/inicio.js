@@ -77,7 +77,7 @@ var botao = document.createElement("button");
 botao.setAttribute("id", id);
 botao.setAttribute("data-bs-toggle", "modal");
 botao.setAttribute("data-bs-target", "#staticBackdrop");
-botao.className = "btn btn-primary mt-2";
+botao.className = "btn btn-primary mt-2 py-2 px-3";
 botao.textContent = "Continuar Lendo";
 botao.addEventListener("click", chamarModal);
 
@@ -111,7 +111,7 @@ function criarcardImg(id, titulo, descricao, imagem){
     botao.setAttribute("id", id);
     botao.setAttribute("data-bs-toggle", "modal");
     botao.setAttribute("data-bs-target", "#staticBackdrop");
-    botao.className = "btn btn-primary mt-2";
+    botao.className = "btn btn-primary mt-2 py-2 px-3";
     botao.textContent = "Continuar Lendo";
     botao.addEventListener("click", chamarModal);
     
@@ -142,6 +142,7 @@ async function chamarModal(){
         let auxdescricao = res[0].Descricao;
         let auxapp = res[0].Nome_Aplicativo;
         let auxcidade = res[0].Nome_Cidade;
+        let auxestado = res[0].UF;
 
         if(res[0].imagens){
             let imagens = res[0].imagens.split(",");
@@ -172,7 +173,7 @@ async function chamarModal(){
         titulo.textContent = auxtitulo;
         descricao.textContent = "• " + auxdescricao;
         aplicativo.textContent = "• Aplicativo: " + auxapp;
-        cidade.textContent = "• Cidade: " + auxcidade;
+        cidade.textContent = "• Cidade: " + auxcidade + " / " + auxestado;
       })
       
 }
@@ -252,7 +253,7 @@ function modalImg(){
 }
 
 function removeImg(){
-    let element = document.querySelectorAll(".modal1 img").forEach(e => e.remove());;
+    document.querySelectorAll(".modal1 img").forEach(e => e.remove());;
 }
 
 document.querySelector(".btn-close").addEventListener("click", removeImg);
