@@ -19,18 +19,6 @@ async function carregarRelatos() {
         contagemApps();})
 }
 
-//  async function carregarImagens() {
-//      fetch('/relatosimg')
-//      .then((res) => res.json()) //colocar width:100%, height:28rem (exemplo) e object-fit: cover; na imagem, alem de setar o height e width na tag img, qualquer coisa pega exemplo diferente no https://buscaportas.com.br/empresas/inffino-marcenaria/
-//      .then((res) => {
-//         for(let i=0; i<=1; i++){
-//             var relatoimg = await 
-//         }
-//          console.log(res[1][1].fk_ID_Relato)})
-//  }
-
-//  carregarImagens();
-
 function carregarPerfil() {
     fetch('/user')
         .then((res) => res.json())
@@ -53,7 +41,8 @@ async function mostrarRelatos(){
     for(let i=auxit; i<auxpagina; i++){
         if(i<auxrelatos.length){
             if(i<=1){
-                let imagem = "./img/" + auxrelatos[i].fk_ID_Usuario + "/" + auxrelatos[i].ID_Relato + "/" + auxrelatos[i].imagens
+                let image = (auxrelatos[i].imagens.split(","))
+                let imagem = "./img/" + auxrelatos[i].fk_ID_Usuario + "/" + auxrelatos[i].ID_Relato + "/" + image[0]
                 criarcardImg(auxrelatos[i].ID_Relato, auxrelatos[i].Titulo, auxrelatos[i].Descricao, imagem);
             }
             else{
@@ -138,7 +127,7 @@ function criarcardImg(id, titulo, descricao, imagem){
     }
 
 async function chamarModal(){
-    document.getElementById("img").style.opacity = "1";
+    removeImg()
     let id = this.getAttribute("id");
     let modal = document.getElementById("staticBackdrop");
     let image = modal.querySelector(".modal img");
@@ -146,51 +135,28 @@ async function chamarModal(){
     let descricao = modal.querySelector(".modal .descricao");
     let aplicativo = modal.querySelector(".modal .aplicativo");
     let cidade = modal.querySelector(".modal .cidade");
-    let game = modal.querySelector(".modal .game");
-    let park = modal.querySelector(".modal .park");
-    let allies = modal.querySelector(".modal .allies");
-    let enemies = modal.querySelector(".modal .enemies");
-    let url = `https://api.disneyapi.dev/characters/${id}`;
-    let cidade2 = "a"
     await fetch("/relatoselect/" + id)
     .then((res) => res.json())
     .then((res) => {
-        cidade2 = res[0].fk_ID_Cidade;
-        let auxapp = "Indefinido"
-        if(res[0].fk_ID_Aplicativo == 1){
-            auxapp = "Whatsapp";
-        }
-        if(res[0].fk_ID_Aplicativo == 2){
-            auxapp = "Facebook";
-        }
-        if(res[0].fk_ID_Aplicativo == 3){
-            auxapp = "Instagram";
-        }
-        if(res[0].fk_ID_Aplicativo == 4){
-            auxapp = "Twitter";
-        }
-        if(res[0].fk_ID_Aplicativo == 5){
-            auxapp = "Email";
-        }
-        if(res[0].fk_ID_Aplicativo == 6){
-            auxapp = "Compras online";
-        }
-        if(res[0].fk_ID_Aplicativo == 7){
-            auxapp = "Outros";
-        }
+        let auxtitulo = res[0].Titulo;
+        let auxdescricao = res[0].Descricao;
+        let auxapp = res[0].Nome_Aplicativo;
+        let auxcidade = res[0].Nome_Cidade;
 
         if(res[0].imagens){
-            // image.remove();
             let imagens = res[0].imagens.split(",");
             for(let i = 0; i<imagens.length; i++){
             let imagempath = './img/' + res[0].fk_ID_Usuario + "/" + res[0].ID_Relato + "/" + imagens[i];
             var imagem = document.createElement("img");
             imagem.setAttribute("id", "img");
             if(i==0){
-                imagem.className = "d-inline-block float-start me-3 mb-1 mt-1 w-100 grande";
+                imagem.className = "d-inline-block float-start me-3 mb-1 mt-1 w-100 grande p-2";
+            }
+            else if(i==1 && imagens.length==2){
+                imagem.className = "d-inline-block float-start me-3 mb-1 mt-1 w-100 grande p-2";
             }
             else{
-                imagem.className = "mt-1 w-50";
+                imagem.className = "mt-1 w-50 p-2";
             }
             imagem.setAttribute("data-bs-toggle", "modal");
             imagem.setAttribute("data-bs-target" , "#exampleModal");
@@ -203,27 +169,11 @@ async function chamarModal(){
         else{
             image.setAttribute("src", "")
         }
-        titulo.textContent = res[0].Titulo;
-        descricao.textContent = "• " + res[0].Descricao;
+        titulo.textContent = auxtitulo;
+        descricao.textContent = "• " + auxdescricao;
         aplicativo.textContent = "• Aplicativo: " + auxapp;
-
-    //   filmecurto.textContent = "• Curtametragens: " + tratarArray(res.shortFilms);
-    //   tvshow.textContent = "• TV Shows: " + tratarArray(res.tvShows);
-    //   game.textContent = "• Games: " + tratarArray(res.videoGames);
-    //   park.textContent = "• Atrações: " + tratarArray(res.parkAttractions);
-    //   allies.textContent = "• Aliados: " + tratarArray(res.allies);
-    //   enemies.textContent = "• Inimigos: " + tratarArray(res.enemies);
+        cidade.textContent = "• Cidade: " + auxcidade;
       })
-      let cidade1 = "Indefinida";
-      await fetch("/cidadeselect/" + cidade2)
-      .then((resposta) => resposta.json())
-      .then((resposta) =>{
-          cidade1 = resposta[0].Nome_Cidade;
-          cidade.textContent = "• Cidade: " + cidade1;
-      })
-    .catch(function (err){
-      console.log(err);
-    })
       
 }
 
@@ -302,11 +252,7 @@ function modalImg(){
 }
 
 function removeImg(){
-    let element = document.querySelectorAll(".modal1 img");
-    //dar um jeito de tirar todas as img com o queryselector all
-    // Array.prototype.forEach.call( element, function( node ) {
-    //     node.parentNode.removeChild( node );
-    // });
+    let element = document.querySelectorAll(".modal1 img").forEach(e => e.remove());;
 }
 
 document.querySelector(".btn-close").addEventListener("click", removeImg);
