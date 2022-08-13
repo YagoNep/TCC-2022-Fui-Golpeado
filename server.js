@@ -79,9 +79,20 @@ app.post('/', isLoggedIn, (req, res) => {
     })
 });
 
-app.get('/relato', (req, res) => {
+app.get('/relato', isLoggedIn, (req, res) => {
     res.header('Content-Type', 'text/html');
     res.sendFile(__dirname + '/site/views/relato.html', function (err) {
+        if (err) {
+            return res.status(err.status).end();
+        } else {
+            return res.status(200).end();
+        }
+    });
+});
+
+app.get('/perfil', isLoggedIn, (req, res) => {
+    res.header('Content-Type', 'text/html');
+    res.sendFile(__dirname + '/site/views/perfil.html', function (err) {
         if (err) {
             return res.status(err.status).end();
         } else {
@@ -176,7 +187,7 @@ app.post('/relato', isLoggedIn, async (req, res) => {
             }
         }
         let vars = await database.getRelatoSelecionado(numero.numero);
-        res.status(201).redirect('/teste');
+        res.status(201).redirect('/inicio');
     }
 })
 
@@ -190,6 +201,10 @@ app.get('/cidadeselect/:id', isLoggedIn, async (req, res) => {
 
 app.get('/relatosimg', isLoggedIn, async (req, res) => {
     res.send(await database.getRelatosImg());
+});
+
+app.get('/meusrelatos/:id', isLoggedIn, async (req, res) => {
+    res.send(await database.getRelatosPerfil(req.params.id));
 });
 
 app.get('/teste', isLoggedIn, (req, res) => {
