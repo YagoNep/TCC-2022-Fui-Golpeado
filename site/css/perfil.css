@@ -1,0 +1,82 @@
+#intro {
+    /* Margin to fix overlapping fixed navbar */
+    margin-top: 55px;
+  }
+  @media (max-width: 991px) {
+    #intro {
+      /* Margin to fix overlapping fixed navbar */
+      margin-top: 45px;
+    }
+  }
+
+body{
+    background-image: url("/img/teste.jpg");
+    background-repeat: no-repeat;
+    background-attachment: scroll;
+    background-size: cover;
+    min-height: 500px;
+    background-attachment: fixed;
+    background-position: center;
+}
+#fotoPerfil{
+    border-radius: 50%;
+}
+.paginas {
+  text-align-last: center;
+}
+.fotinha{
+  height: 20rem;
+  object-fit: cover;
+  object-position: center;
+  border-radius: 3%;
+}
+.modal-title{
+  overflow-wrap: anywhere;
+}
+.modal-content{
+  padding: 1rem;
+  background-color: #212529;
+}
+.descricao{
+  text-align: justify;
+  overflow-wrap: anywhere;
+  line-height: normal;
+}
+.aplicativo{
+  line-height: normal;
+}
+.cidade{
+  line-height: normal;
+}
+.modal1 img{
+  width:50%;
+  object-fit: scale-down;
+  cursor: pointer;
+  height: 20rem;
+    object-fit: cover;
+    object-position: center;
+    border-radius: 3%;
+    min-width: 50%;
+}
+.modal2 .modal-content{
+  background-color: transparent;
+}
+.modal2 img{
+  height: 100%;
+  object-fit: cover;
+  width: auto;
+  max-inline-size: -webkit-fill-available;
+  margin: 0 auto;
+}
+.modal-body{
+  display: flex;
+  flex-direction: column;
+  flex-flow: wrap;
+}
+.grande{
+  align-self: center;
+}
+.btn-close {
+  color: #fff!important; 
+  opacity: 1;
+}
