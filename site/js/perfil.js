@@ -33,11 +33,19 @@ function carregarRelatos() {
         contagemApps();})
 }
 
+function apagarRelato() {
+
+}
+
 function mostrarPerfil(res) {
     var fotoPerfil = document.getElementById('fotoPerfil');
     var nomePerfil = document.getElementById('nomePerfil');
+    var fotoPerfil2 = document.getElementById('fotoPerfil2')
+    var nomePerfil2 = document.getElementById('nomePerfil2');
     fotoPerfil.src = res.picture;
     nomePerfil.textContent = res.displayName;
+    fotoPerfil2.src = res.picture;
+    nomePerfil2.textContent = res.displayName;
 }
 
 async function mostrarRelatos(){
@@ -84,10 +92,16 @@ botao.setAttribute("data-bs-target", "#staticBackdrop");
 botao.className = "btn btn-primary mt-2 py-2 px-3";
 botao.textContent = "Continuar Lendo";
 botao.addEventListener("click", chamarModal);
+var botao2 = document.createElement("button");
+botao2.setAttribute("id", id);
+botao2.className = "btn btn-danger ms-2 mt-2 py-2 px-3";
+botao2.textContent = "Apagar";
+botao2.addEventListener("click", apagarRelato);
 
 card2.appendChild(titulo1);
 card2.appendChild(descricao1);
 card2.appendChild(botao);
+card2.appendChild(botao2);
 card1.appendChild(card2);
 card.appendChild(card1);
 
@@ -118,11 +132,17 @@ function criarcardImg(id, titulo, descricao, imagem){
     botao.className = "btn btn-primary mt-2 py-2 px-3";
     botao.textContent = "Continuar Lendo";
     botao.addEventListener("click", chamarModal);
+    var botao2 = document.createElement("button");
+    botao2.setAttribute("id", id);
+    botao2.className = "btn btn-danger ms-2 mt-2 py-2 px-3";
+    botao2.textContent = "Apagar";
+    botao2.addEventListener("click", apagarRelato);
     
 
     card2.appendChild(titulo1);
     card2.appendChild(descricao1);
     card2.appendChild(botao);
+    card2.appendChild(botao2);
     card1.appendChild(img);
     card1.appendChild(card2);
     card.appendChild(card1);

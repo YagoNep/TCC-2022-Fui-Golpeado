@@ -79,6 +79,20 @@ app.post('/', isLoggedIn, (req, res) => {
     })
 });
 
+app.get('/delete/:id', isLoggedIn, async (req, res) =>{
+    let relato = await database.getRelatoSelecionado(req.params.id);
+    if(req.user.id == relato[0].fk_ID_Usuario){
+        let a = await database.deleteImagensRelato(req.params.id);
+        console.log(a);
+        let b = await database.deleteRelato(req.params.id);
+        console.log(b);
+        res.redirect('/perfil')
+    }
+    else{
+        res.redirect('/inicio')
+    }
+});
+
 app.get('/relato', isLoggedIn, (req, res) => {
     res.header('Content-Type', 'text/html');
     res.sendFile(__dirname + '/site/views/relato.html', function (err) {

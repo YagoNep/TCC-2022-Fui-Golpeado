@@ -217,8 +217,8 @@ google.charts.setOnLoadCallback(drawChart);
           ['Instagram',  instagram],
           ['Twitter', twitter],
           ['Email',    email],
-          ['Compras Online', compras]
-        // ['Outros', outros]
+          ['Compras Online', compras],
+          ['Outros', outros]
         ]);
 
         var options = {
@@ -239,7 +239,7 @@ google.charts.setOnLoadCallback(drawChart);
             legend:{
                 textStyle:chartTextStyle
             },
-            colors: ['#32CD32', '#1E90FF', '#FF0000', '#00CED1', '#8A2BE2', '#FFFF00']
+            colors: ['#32CD32', '#0047AB', '#D2042D', '#00CED1', '#8A2BE2', '#FDDA0D', '#8C8C8C']
         };
 
         var chart = new google.visualization.PieChart(document.getElementById('piechart'));

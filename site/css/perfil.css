@@ -18,7 +18,7 @@ body{
     background-attachment: fixed;
     background-position: center;
 }
-#fotoPerfil{
+#fotoPerfil, #fotoPerfil2{
     border-radius: 50%;
 }
 .paginas {

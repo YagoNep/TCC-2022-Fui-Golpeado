@@ -28,8 +28,8 @@
           <div class="dropdown">
           <img id="fotoPerfil" type="button" data-bs-toggle="dropdown" aria-expanded="false" src="" alt="" width="45" height="45" referrerpolicy="no-referrer" class="ms-2 bg-transparent p-1 btn btn-secondary dropdown-toggle">
           <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark">
-            <li><a class="dropdown-item" href="#">Meu Perfil</a></li>
-            <li><a class="dropdown-item" href="/inicio">Página Inicial</a></li>
+            <li><a class="dropdown-item" href="/inicio"><i class="bi bi-house"></i> Inicio</a></li>
+            <li><a class="dropdown-item" href="/perfil"><i class="bi bi-person-circle"></i> Meu Perfil</a></li>
             <li><a class="dropdown-item" href="/logout"><i class="bi bi-box-arrow-right"></i> Logout</a></li>
           </ul>
         </div>
@@ -37,12 +37,13 @@
       </div>
     </nav>
   </header>
-  <div class="container">
+  <main class="bg-dark bg-opacity-75">
+    <div class="container">
     <form id="relato" method="POST" action="/relato" enctype="multipart/form-data">
-      <div class="p-5 text-dark bg-light bg-opacity-75 rounded-3 d-flex flex-column m-auto">
+      <div class="p-5 text-light bg-dark bg-opacity-50 rounded-5 d-flex flex-column m-auto">
         <h1 class="text-primary mx-auto"><i class="fa-solid fa-scroll"></i> <b> Relato do Golpe</b></h1>
         <div class="form-outline mb-3">
-          <label class="form-label h5" for="loginName">Título do Golpe</label>
+          <label class="form-label h5" for="loginName">Título do Golpe</label> <!--"border bg-dark form-outline form-white" pra deixar fundo preto e falta escrita branca -->
           <input type="text" class="form-control" autocomplete="off" placeholder="Golpe exemplo" required name="titulo"
             rows="1" maxlength="50">
         </div>
@@ -85,6 +86,7 @@
       </div>
     </form>
   </div>
+  </main>
 </body>
 
 </html>

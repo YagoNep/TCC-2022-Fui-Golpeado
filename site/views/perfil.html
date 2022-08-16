@@ -31,28 +31,29 @@
               height="45" referrerpolicy="no-referrer"
               class="ms-2 bg-transparent p-1 btn btn-secondary dropdown-toggle">
             <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark">
-              <li><a class="dropdown-item" href="/inicio">Inicio</a></li>
-              <li><a class="dropdown-item" href="/relato">Registrar Relato</a></li>
+              <li><a class="dropdown-item" href="/inicio"><i class="bi bi-house"></i> Inicio</a></li>
+              <li><a class="dropdown-item" href="/relato"><i class="bi bi-pencil"></i> Registrar Relato</a></li>
               <li><a class="dropdown-item" href="/logout"><i class="bi bi-box-arrow-right"></i> Logout</a></li>
-              
+
             </ul>
           </div>
         </div>
       </div>
     </nav>
-    <div class="container"><div id="intro" class="p-5 text-light" style="
-        display: flex;
-    ">
-          <img id="fotoPerfil" type="button" data-bs-toggle="dropdown" aria-expanded="false" src="https://lh3.googleusercontent.com/a-/AFdZucr0iuIIUL6X6tIaRmhlQ5clk97XdzL-qOH9y2h7sw=s96-c" alt="" width="150" height="150" referrerpolicy="no-referrer" class="ms-5 bg-transparent p-1 btn btn-secondary dropdown-toggle" style="/* margin-left: auto; *//* margin: auto; */"><h1 class="mb-3 h1">Yago A. Nepomuceno</h1>
-          
-          
-        </div></div>
+    <div class="container">
+      <div id="intro" class="p-5 text-light d-flex flex-column">
+        <img id="fotoPerfil2" src="" alt="" width="150" height="150" referrerpolicy="no-referrer"
+          class="mx-auto bg-transparent p-1">
+        <h1 class="mx-auto h1 text-center" id="nomePerfil2"></h1>
+
+      </div>
+    </div>
   </header>
   <main class="bg-dark bg-opacity-75">
     <div class="container">
       <!--Section: Content-->
       <section class="text-center">
-        <h4 class="mb-5 text-light"><strong>Últimos Relatos</strong></h4>
+        <h4 class="mb-5 text-light"><strong>Meus Relatos</strong></h4>
 
         <div class="row" id="teste">
 
@@ -75,7 +76,8 @@
         <div class="modal-content">
           <div class="modal-header">
             <h3 class="modal-title me-3 text-light" id="exampleModalLabel" width="100%">Modal title</h3>
-            <button type="button" class="btn-close btn-close-white me-1" data-bs-dismiss="modal" aria-label="Close"></button>
+            <button type="button" class="btn-close btn-close-white me-1" data-bs-dismiss="modal"
+              aria-label="Close"></button>
           </div>
           <div class="modal-body" id="corpomodal">
             <p class="h6 descricao w-100 text-light"></p>
@@ -88,7 +90,8 @@
     </div>
     </div>
     <!-- Modal img -->
-    <div class="modal fade modal2" id="exampleModal" data-bs-target="#staticBackdrop" data-bs-toggle="modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal fade modal2" id="exampleModal" data-bs-target="#staticBackdrop" data-bs-toggle="modal"
+      tabindex="-1" role="dialog" aria-hidden="true">
       <div class="modal-dialog modal-xl" data-bs-target="#staticBackdrop" data-bs-toggle="modal" role="document">
         <div class="modal-content">
           <div class="modal-body">

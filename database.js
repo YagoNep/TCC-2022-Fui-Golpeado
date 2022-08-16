@@ -45,8 +45,16 @@ database.insertRelato = async function (titulo, descricao, dia, aplicativo, cida
     }
 }
 
+database.deleteImagensRelato = async function (id) {
+    let [data] = await database.con.execute('DELETE FROM imagem WHERE fk_ID_Relato = ?', [id]);
+
+    return {
+        'deletado': id
+    }
+}
+
 database.deleteRelato = async function (id) {
-    let [data] = await database.con.execute('DELETE FROM relato WHERE id = ?', [id]);
+    let [data] = await database.con.execute('DELETE FROM relato WHERE ID_Relato = ?', [id]);
 
     return {
         'deletado': id

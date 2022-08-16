@@ -1,9 +1,9 @@
-#intro {
+#relato {
     /* Margin to fix overlapping fixed navbar */
     margin-top: 55px;
   }
   @media (max-width: 991px) {
-    #intro {
+    #relato {
       /* Margin to fix overlapping fixed navbar */
       margin-top: 45px;
     }
