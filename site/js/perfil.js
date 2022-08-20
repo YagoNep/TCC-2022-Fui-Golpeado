@@ -33,8 +33,24 @@ function carregarRelatos() {
         contagemApps();})
 }
 
-function apagarRelato() {
+function apagarRelato(event) {
+    event.preventDefault();
+    let id = this.getAttribute("id")
+    let header = {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json; charset=UTF-8'
+            }};
 
+    var doc; //tirar sa porra
+            var result = confirm("Tem certeza que deseja excluir o relato?");
+            if (result == true) {
+                fetch('/delete/' + id, header);
+                location = "/perfil";
+            } else {
+                doc = "Cancel was pressed.";
+            }
+            console.log(doc); // tirar sa porra
 }
 
 function mostrarPerfil(res) {
