@@ -79,7 +79,7 @@ app.post('/', isLoggedIn, (req, res) => {
     })
 });
 
-app.get('/delete/:id', isLoggedIn, async (req, res) =>{
+app.delete('/delete/:id', isLoggedIn, async (req, res) =>{
     let relato = await database.getRelatoSelecionado(req.params.id);
     if(req.user.id == relato[0].fk_ID_Usuario){
         let a = await database.deleteImagensRelato(req.params.id);
