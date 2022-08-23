@@ -217,6 +217,10 @@ app.get('/relatosimg', isLoggedIn, async (req, res) => {
     res.send(await database.getRelatosImg());
 });
 
+app.get('/contagemcidades', isLoggedIn, async (req, res) => {
+    res.send(await database.getContagemCidadess());
+});
+
 app.get('/meusrelatos/:id', isLoggedIn, async (req, res) => {
     res.send(await database.getRelatosPerfil(req.params.id));
 });

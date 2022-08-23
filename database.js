@@ -93,6 +93,12 @@ database.getUsuarioSelecionado = async function (id) {
     return rows;
 }
 
+database.getContagemCidadess = async function () {
+    let [rows, fields] = await database.con.execute('SELECT cidade.Nome_Cidade, e.UF, count(relato.fk_ID_Cidade) as contagem from cidade left join relato on (cidade.ID_Cidade = relato.fk_ID_Cidade) INNER JOIN estado as e ON cidade.fk_ID_Estado = e.ID_Estado group by cidade.ID_Cidade ORDER BY count(relato.fk_ID_Cidade) DESC LIMIT 5');
+
+    return rows;
+}
+
 database.cadastraUsuario = async function (id) {
     let [data] = await database.con.execute('INSERT INTO usuario (ID_Usuario) VALUES (?)', [id]);
 

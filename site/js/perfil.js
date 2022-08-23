@@ -92,7 +92,7 @@ var card = document.createElement("div");
 card.className = "col-lg-6 col-md-6 mb-4";
 card.setAttribute("value", id);
 var card1 = document.createElement("div");
-card1.className = "card bg-dark text-light h-100 p-5";
+card1.className = "card bg-light bg-opacity-75 text-dark h-100 p-5";
 var card2 = document.createElement("div");
 card2.className = "card-body";
 var titulo1 = document.createElement("h4");
@@ -129,7 +129,7 @@ function criarcardImg(id, titulo, descricao, imagem){
     card.className = "col-lg-6 col-md-6 mb-4";
     card.setAttribute("value", id);
     var card1 = document.createElement("div");
-    card1.className = "card bg-dark text-light h-100 p-5";
+    card1.className = "card bg-light bg-opacity-75 text-dark h-100 p-5";
     var img = document.createElement("img");
     img.setAttribute("src", imagem);
     img.className = "img-fluid w-100 fotinha"
@@ -243,47 +243,6 @@ async function contagemApps(){
             }
 }
 }
-
-google.charts.load('current', {'packages':['corechart']});
-google.charts.setOnLoadCallback(drawChart);
-      function drawChart() {
-
-        var data = google.visualization.arrayToDataTable([
-          ['Task', 'Hours per Day'],
-          ['Whatsapp',     whatsapp],
-          ['Facebook',      facebook],
-          ['Instagram',  instagram],
-          ['Twitter', twitter],
-          ['Email',    email],
-          ['Compras Online', compras]
-        // ['Outros', outros]
-        ]);
-
-        var options = {
-          title: 'Aplicativos',
-          titleTextStyle : {
-            color:chartTextStyle
-          },
-          backgroundColor: { fill:'transparent' },
-          vAxis: {
-                textStyle:chartTextStyle,
-                titleTextStyle:chartTextStyle,
-                gridlines: {color: '#787878'}
-            },
-            hAxis: {
-                textStyle:chartTextStyle,
-                titleTextStyle:chartTextStyle
-            },
-            legend:{
-                textStyle:chartTextStyle
-            },
-            colors: ['#32CD32', '#1E90FF', '#FF0000', '#00CED1', '#8A2BE2', '#FFFF00']
-        };
-
-        var chart = new google.visualization.PieChart(document.getElementById('piechart'));
-
-        chart.draw(data, options);
-      }
 
 function modalImg(){
     let source = this.getAttribute("src");
