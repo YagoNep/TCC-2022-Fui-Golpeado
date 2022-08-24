@@ -30,6 +30,12 @@ database.getRelatoSelecionado = async function (id) {
     return rows;
 }
 
+database.getRelatoEditando = async function (id) {
+    let [rows, fields] = await database.con.execute('SELECT * FROM relato WHERE ID_Relato = ?', [id]);
+
+    return rows;
+}
+
 database.getRelatosPerfil = async function (id) {
     let [rows, fields] = await database.con.execute('SELECT r.*, GROUP_CONCAT(i.Nome_Imagem) AS imagens FROM imagem AS i RIGHT JOIN relato as r ON i.fk_ID_Relato = r.ID_Relato WHERE r.fk_ID_Usuario = ? GROUP BY r.ID_Relato ORDER BY imagens desc;', [id]);
 
@@ -62,7 +68,7 @@ database.deleteRelato = async function (id) {
 }
 
 database.editRelato = async function (titulo, descricao, dia, aplicativo, cidade, usuario, id) {
-    let [data] = await database.con.execute('UPDATE relato SET Titulo = ?, Descricao = ?, Data = ?, fk_ID_Aplicativo = ?, fk_ID_Cidade = ?, fk_ID_Usuario = ?  WHERE id = ?', [titulo, descricao, dia, aplicativo, cidade, usuario, id]);
+    let [data] = await database.con.execute('UPDATE relato SET Titulo = ?, Descricao = ?, Data = ?, fk_ID_Aplicativo = ?, fk_ID_Cidade = ?, fk_ID_Usuario = ?  WHERE ID_Relato = ?', [titulo, descricao, dia, aplicativo, cidade, usuario, id]);
 
     return {
         'alterado': id
