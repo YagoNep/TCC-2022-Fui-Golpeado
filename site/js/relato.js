@@ -32,14 +32,6 @@ function carregarAplicativos() {
 
 carregarAplicativos();
 
-function criarLinha(email) {
-    window.localStorage.setItem('email', email);
-    var teste2 = window.localStorage.getItem('email');
-    var teste = document.getElementById('teste');
-    teste.innerText = teste2;
-    console.log(email);
-}
-
 function populatesUfs() {
     const ufSelect = document.querySelector("select[name=uf]")
 
