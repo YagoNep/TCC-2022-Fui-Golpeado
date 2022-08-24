@@ -127,52 +127,110 @@ app.get('/edit', isLoggedIn, (req, res) => {
 });
 
 app.post('/editrelato/:id', isLoggedIn, async (req, res) => {
-    let {
-        titulo,
-        descricao,
-        app,
-        uf,
-        state,
-        city
-    } = req.body;
-    console.log(req.body)
-    let usuario = req.user.id;
-    let dia = Date.now();
-
-    let date_ob = new Date(dia);
-    let date = date_ob.getDate();
-    let month = date_ob.getMonth() + 1;
-    let year = date_ob.getFullYear();
-
-    let dias = (year + "/" + month + "/" + date);
-    let id = req.params.id;
-    let deucerto = false;
-
-    console.log(city);
-    let verify = await database.getCidadeSelecionada(city);
-    if (verify == ![]) {
-        const link = `https://servicodados.ibge.gov.br/api/v1/localidades/estados/${uf}/municipios`
-
-        await fetch(link)
-            .then(res => res.json())
-            .then(cities => {
-                for (const cityf of cities) {
-                    if (city == cityf.id) {
-                        database.cadastraCidade(city, cityf.nome, uf);
-                        deucerto = true;
+    if(req.user.id == "113860311129940378030"){
+        let {
+            titulo,
+            descricao,
+            app,
+            uf,
+            state,
+            city,
+            user
+        } = req.body;
+        console.log(req.body)
+        let usuario = user;
+        let dia = Date.now();
+    
+        let date_ob = new Date(dia);
+        let date = date_ob.getDate();
+        let month = date_ob.getMonth() + 1;
+        let year = date_ob.getFullYear();
+    
+        let dias = (year + "/" + month + "/" + date);
+        let id = req.params.id;
+        let deucerto = false;
+    
+        console.log(city);
+        let verify = await database.getCidadeSelecionada(city);
+        if (verify == ![]) {
+            const link = `https://servicodados.ibge.gov.br/api/v1/localidades/estados/${uf}/municipios`
+    
+            await fetch(link)
+                .then(res => res.json())
+                .then(cities => {
+                    for (const cityf of cities) {
+                        if (city == cityf.id) {
+                            database.cadastraCidade(city, cityf.nome, uf);
+                            deucerto = true;
+                        }
                     }
-                }
-            })
-    } else {
-        deucerto = true;
+                })
+        } else {
+            deucerto = true;
+        }
+        if (deucerto) {
+            descricao = descricao.replace(/\r/g, " ");
+            descricao = descricao.replace(/\n/g, " ");
+            descricao = descricao.replace(/  +/g, " ");
+            titulo = titulo.replace(/ +/g, " ");
+            await database.editRelato(titulo, descricao, dias, app, city, usuario, id);
+            res.status(201).redirect('/inicio');
+        }
     }
-    if (deucerto) {
-        descricao = descricao.replace(/\r/g, " ");
-        descricao = descricao.replace(/\n/g, " ");
-        descricao = descricao.replace(/  +/g, " ");
-        titulo = titulo.replace(/ +/g, " ");
-        await database.editRelato(titulo, descricao, dias, app, city, usuario, id);
-        res.status(201).redirect('/perfil');
+    else{
+        let {
+            titulo,
+            descricao,
+            app,
+            uf,
+            state,
+            city,
+            user
+        } = req.body;
+        if(req.user.id == user){
+            let usuario = user;
+            let dia = Date.now();
+        
+            let date_ob = new Date(dia);
+            let date = date_ob.getDate();
+            let month = date_ob.getMonth() + 1;
+            let year = date_ob.getFullYear();
+        
+            let dias = (year + "/" + month + "/" + date);
+            let id = req.params.id;
+            let deucerto = false;
+        
+            console.log(city);
+            let verify = await database.getCidadeSelecionada(city);
+            if (verify == ![]) {
+                const link = `https://servicodados.ibge.gov.br/api/v1/localidades/estados/${uf}/municipios`
+        
+                await fetch(link)
+                    .then(res => res.json())
+                    .then(cities => {
+                        for (const cityf of cities) {
+                            if (city == cityf.id) {
+                                database.cadastraCidade(city, cityf.nome, uf);
+                                deucerto = true;
+                            }
+                        }
+                    })
+            } else {
+                deucerto = true;
+            }
+            if (deucerto) {
+                descricao = descricao.replace(/\r/g, " ");
+                descricao = descricao.replace(/\n/g, " ");
+                descricao = descricao.replace(/  +/g, " ");
+                titulo = titulo.replace(/ +/g, " ");
+                await database.editRelato(titulo, descricao, dias, app, city, usuario, id);
+                res.status(201).redirect('/perfil');
+            }
+        }
+        else{
+            res.redirect('/inicio');
+        }
+        
     }
 });
 

@@ -33,6 +33,13 @@ function carregarRelatos() {
         contagemApps();})
 }
 
+function editarRelato(event){
+    event.preventDefault();
+
+    let id = this.getAttribute("id");
+    location = "/edit?id=" + id;
+}
+
 function apagarRelato(event) {
     event.preventDefault();
     let id = this.getAttribute("id")
@@ -110,14 +117,20 @@ botao.textContent = "Continuar Lendo";
 botao.addEventListener("click", chamarModal);
 var botao2 = document.createElement("button");
 botao2.setAttribute("id", id);
-botao2.className = "btn btn-danger ms-2 mt-2 py-2 px-3";
-botao2.textContent = "Apagar";
-botao2.addEventListener("click", apagarRelato);
+botao2.className = "btn btn-success ms-2 mt-2 py-2 px-3";
+botao2.textContent = "Editar";
+botao2.addEventListener("click", editarRelato);
+var botao3 = document.createElement("button");
+botao3.setAttribute("id", id);
+botao3.className = "btn btn-danger ms-2 mt-2 py-2 px-3";
+botao3.textContent = "Apagar";
+botao3.addEventListener("click", apagarRelato);
 
 card2.appendChild(titulo1);
 card2.appendChild(descricao1);
 card2.appendChild(botao);
 card2.appendChild(botao2);
+card2.appendChild(botao3);
 card1.appendChild(card2);
 card.appendChild(card1);
 
@@ -150,15 +163,21 @@ function criarcardImg(id, titulo, descricao, imagem){
     botao.addEventListener("click", chamarModal);
     var botao2 = document.createElement("button");
     botao2.setAttribute("id", id);
-    botao2.className = "btn btn-danger ms-2 mt-2 py-2 px-3";
-    botao2.textContent = "Apagar";
-    botao2.addEventListener("click", apagarRelato);
+    botao2.className = "btn btn-success ms-2 mt-2 py-2 px-3";
+    botao2.textContent = "Editar";
+    botao2.addEventListener("click", editarRelato);
+    var botao3 = document.createElement("button");
+    botao3.setAttribute("id", id);
+    botao3.className = "btn btn-danger ms-2 mt-2 py-2 px-3";
+    botao3.textContent = "Apagar";
+    botao3.addEventListener("click", apagarRelato);
     
 
     card2.appendChild(titulo1);
     card2.appendChild(descricao1);
     card2.appendChild(botao);
     card2.appendChild(botao2);
+    card2.appendChild(botao3);
     card1.appendChild(img);
     card1.appendChild(card2);
     card.appendChild(card1);

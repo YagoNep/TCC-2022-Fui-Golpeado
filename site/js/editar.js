@@ -6,6 +6,8 @@ let auxDescricao = ""
 let auxApp = ""
 let auxCidade = ""
 let auxEstado = ""
+let auxUsuario = ""
+
 
 document.querySelector("select[name=uf]").addEventListener("change", getCities)
 
@@ -29,11 +31,12 @@ async function carregarDados(id){
         auxApp = res[0].fk_ID_Aplicativo;
         auxCidade = res[0].fk_ID_Cidade;
         auxEstado = auxCidade.toString().substr(0,2);
+        auxUsuario = res[0].fk_ID_Usuario;
 
         var idRelato = document.getElementById('relato');
         idRelato.setAttribute("action", "/editrelato/" + auxId);
 
-        mostrarDados(auxId, auxTitulo, auxDescricao, auxApp, auxEstado, auxCidade);
+        mostrarDados(auxId, auxTitulo, auxDescricao, auxApp, auxEstado, auxCidade, auxUsuario);
         })
 }
 
@@ -138,16 +141,18 @@ areaSelect.addEventListener(`change`, (e) => {
     console.log(value, desc);
 });
 
-function mostrarDados(id, titulo, descricao, app, estado, cidade){
+function mostrarDados(id, titulo, descricao, app, estado, cidade, usuario){
     console.log(id + " " + titulo + " " + descricao + " " + app + " " + estado + " " + cidade);
     const tituloSelect = document.querySelector("[name=titulo]");
     const descricaoSelect = document.querySelector("[name=descricao]")
     const appSelect = document.querySelector("select[name=app]");
     const ufSelect = document.querySelector("select[name=uf]");
+    const userSelect = document.querySelector("[name=user]");
 
     tituloSelect.value = titulo;
     descricaoSelect.textContent = descricao;
     appSelect.value = app;
     ufSelect.value = auxEstado;
+    userSelect.value = auxUsuario;
     getCitiesSelecionada(auxEstado, auxCidade);
 }

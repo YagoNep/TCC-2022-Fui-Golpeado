@@ -17,19 +17,19 @@
   <link rel="stylesheet" href="/css/editar.css">
 </head>
 
-<body class="h-100">
+<body class="h-100 d-grid">
   <!-- https://getbootstrap.com/docs/5.2/components/offcanvas/ pra ajudar quando tiver responsivo-->
   <header>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark text-light fixed-top">
       <div class="container-fluid opacity-100">
-        <a class="navbar-brand ms-4" href="/inicio"><i class="bi bi-arrow-left-circle"></i> Fui Golpeado</a>
+        <a class="navbar-brand ms-4" href="/perfil"><i class="bi bi-arrow-left-circle"></i> Fui Golpeado</a>
         <div class="d-flex me-4 text-decoration-none">
           <span class="navbar-text text-light mt-1" id="nomePerfil"></span>
           <div class="dropdown">
           <img id="fotoPerfil" type="button" data-bs-toggle="dropdown" aria-expanded="false" src="" alt="" width="45" height="45" referrerpolicy="no-referrer" class="ms-2 bg-transparent p-1 btn btn-secondary dropdown-toggle">
           <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark">
             <li><a class="dropdown-item" href="/inicio"><i class="bi bi-house"></i> Inicio</a></li>
-            <li><a class="dropdown-item" href="/perfil"><i class="bi bi-person-circle"></i> Meu Perfil</a></li>
+            <li><a class="dropdown-item" href="/relato"><i class="bi bi-pencil"></i> Registrar Relato</a></li>
             <li><a class="dropdown-item" href="/logout"><i class="bi bi-box-arrow-right"></i> Logout</a></li>
           </ul>
         </div>
@@ -76,6 +76,7 @@
                 <option value="">Selecione a cidade</option>
               </select>
             </div>
+            <input type="hidden" class="form-control" autocomplete="off" placeholder="user" required name="user">
           </div>
         </fieldset>
         <label for="arquivo" class="h5 mt-3">Imagem</label>

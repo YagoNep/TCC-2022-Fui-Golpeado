@@ -12,6 +12,7 @@ let outros = 0;
 var chartTextStyle = {
     color: '#FFF'
 };
+let idUser = 0;
 
 async function carregarRelatos() {
     fetch('/relatos')
@@ -29,6 +30,7 @@ function carregarPerfil() {
         .then((res) => res.json())
         .then((res) => {
             mostrarPerfil(res);
+            idUser = res.id
         })
 }
 
@@ -45,14 +47,26 @@ async function mostrarRelatos() {
 
     for (let i = auxit; i < auxpagina; i++) {
         if (i < auxrelatos.length) {
-            if (i <= 1) {
-                let image = (auxrelatos[i].imagens.split(","))
-                let imagem = "./img/" + auxrelatos[i].fk_ID_Usuario + "/" + auxrelatos[i].ID_Relato + "/" + image[0]
-                criarcardImg(auxrelatos[i].ID_Relato, auxrelatos[i].Titulo, auxrelatos[i].Descricao, imagem);
+            if (idUser == '113860311129940378030') { //admin
+                if (i <= 1) {
+                    console.log(auxrelatos[i].fk_ID_Usuario)
+                    let image = (auxrelatos[i].imagens.split(","))
+                    let imagem = "./img/" + auxrelatos[i].fk_ID_Usuario + "/" + auxrelatos[i].ID_Relato + "/" + image[0]
+                    criarcardImgADM(auxrelatos[i].ID_Relato, auxrelatos[i].Titulo, auxrelatos[i].Descricao, imagem);
+                } else {
+                    criarcardADM(auxrelatos[i].ID_Relato, auxrelatos[i].Titulo, auxrelatos[i].Descricao);
+                }
+                auxit++;
             } else {
-                criarcard(auxrelatos[i].ID_Relato, auxrelatos[i].Titulo, auxrelatos[i].Descricao);
+                if (i <= 1) {
+                    let image = (auxrelatos[i].imagens.split(","))
+                    let imagem = "./img/" + auxrelatos[i].fk_ID_Usuario + "/" + auxrelatos[i].ID_Relato + "/" + image[0]
+                    criarcardImg(auxrelatos[i].ID_Relato, auxrelatos[i].Titulo, auxrelatos[i].Descricao, imagem);
+                } else {
+                    criarcard(auxrelatos[i].ID_Relato, auxrelatos[i].Titulo, auxrelatos[i].Descricao);
+                }
+                auxit++;
             }
-            auxit++;
         }
     }
     auxpagina += 6;
@@ -130,6 +144,125 @@ function criarcardImg(id, titulo, descricao, imagem) {
     document.getElementById("teste").appendChild(card)
 }
 
+function criarcardADM(id, titulo, descricao) {
+    var card = document.createElement("div");
+    card.className = "col-lg-6 col-md-6 mb-4";
+    card.setAttribute("value", id);
+    var card1 = document.createElement("div");
+    card1.className = "card bg-light bg-opacity-75 text-dark h-100 p-5";
+    var card2 = document.createElement("div");
+    card2.className = "card-body";
+    var titulo1 = document.createElement("h4");
+    titulo1.textContent = titulo;
+    titulo1.className = "card-title";
+    var descricao1 = document.createElement("p");
+    descricao1.textContent = descricao.substring(0, 175) + "...";
+    descricao1.className = "card-text";
+    var botao = document.createElement("button");
+    botao.setAttribute("id", id);
+    botao.setAttribute("data-bs-toggle", "modal");
+    botao.setAttribute("data-bs-target", "#staticBackdrop");
+    botao.className = "btn btn-primary mt-2 py-2 px-3";
+    botao.textContent = "Continuar Lendo";
+    botao.addEventListener("click", chamarModal);
+    var botao2 = document.createElement("button");
+    botao2.setAttribute("id", id);
+    botao2.className = "btn btn-success ms-2 mt-2 py-2 px-3";
+    botao2.textContent = "Editar";
+    botao2.addEventListener("click", editarRelato);
+    var botao3 = document.createElement("button");
+    botao3.setAttribute("id", id);
+    botao3.className = "btn btn-danger ms-2 mt-2 py-2 px-3";
+    botao3.textContent = "Apagar";
+    botao3.addEventListener("click", apagarRelato);
+
+    card2.appendChild(titulo1);
+    card2.appendChild(descricao1);
+    card2.appendChild(botao);
+    card2.appendChild(botao2);
+    card2.appendChild(botao3);
+    card1.appendChild(card2);
+    card.appendChild(card1);
+
+    document.getElementById("teste").appendChild(card)
+}
+
+function criarcardImgADM(id, titulo, descricao, imagem) {
+    var card = document.createElement("div");
+    card.className = "col-lg-6 col-md-6 mb-4";
+    card.setAttribute("value", id);
+    var card1 = document.createElement("div");
+    card1.className = "card bg-light bg-opacity-75 text-dark h-100 p-5";
+    var img = document.createElement("img");
+    img.setAttribute("src", imagem);
+    img.className = "img-fluid w-100 fotinha"
+    var card2 = document.createElement("div");
+    card2.className = "card-body";
+    var titulo1 = document.createElement("h4");
+    titulo1.textContent = titulo;
+    titulo1.className = "card-title";
+    var descricao1 = document.createElement("p");
+    descricao1.textContent = descricao.substring(0, 175) + "...";
+    descricao1.className = "card-text";
+    var botao = document.createElement("button");
+    botao.setAttribute("id", id);
+    botao.setAttribute("data-bs-toggle", "modal");
+    botao.setAttribute("data-bs-target", "#staticBackdrop");
+    botao.className = "btn btn-primary mt-2 py-2 px-3";
+    botao.textContent = "Continuar Lendo";
+    botao.addEventListener("click", chamarModal);
+    var botao2 = document.createElement("button");
+    botao2.setAttribute("id", id);
+    botao2.className = "btn btn-success ms-2 mt-2 py-2 px-3";
+    botao2.textContent = "Editar";
+    botao2.addEventListener("click", editarRelato);
+    var botao3 = document.createElement("button");
+    botao3.setAttribute("id", id);
+    botao3.className = "btn btn-danger ms-2 mt-2 py-2 px-3";
+    botao3.textContent = "Apagar";
+    botao3.addEventListener("click", apagarRelato);
+
+
+    card2.appendChild(titulo1);
+    card2.appendChild(descricao1);
+    card2.appendChild(botao);
+    card2.appendChild(botao2);
+    card2.appendChild(botao3);
+    card1.appendChild(img);
+    card1.appendChild(card2);
+    card.appendChild(card1);
+
+    document.getElementById("teste").appendChild(card)
+}
+
+function editarRelato(event) {
+    event.preventDefault();
+
+    let id = this.getAttribute("id");
+    location = "/edit?id=" + id;
+}
+
+function apagarRelato(event) {
+    event.preventDefault();
+    let id = this.getAttribute("id")
+    let header = {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json; charset=UTF-8'
+        }
+    };
+
+    var doc; //tirar sa porra
+    var result = confirm("Tem certeza que deseja excluir o relato?");
+    if (result == true) {
+        fetch('/delete/' + id, header);
+        location = "/perfil";
+    } else {
+        doc = "Cancel was pressed.";
+    }
+    console.log(doc); // tirar sa porra
+}
+
 async function chamarModal() {
     removeImg()
     let id = this.getAttribute("id");
@@ -181,11 +314,11 @@ async function chamarModal() {
 
 carregarRelatos();
 
-async function contagemCidades(){
+async function contagemCidades() {
     fetch('/contagemcidades')
-    .then((res) => res.json())
+        .then((res) => res.json())
         .then((res) => {
-            auxcidades=res;
+            auxcidades = res;
         })
 }
 
@@ -238,8 +371,8 @@ function drawChart() {
 
     var options = {
         responsive: true,
-        'width':600,
-        'height':500,
+        'width': 600,
+        'height': 500,
         title: 'Aplicativos',
         titleTextStyle: {
             color: chartTextStyle
@@ -289,8 +422,8 @@ function drawChart2() {
 
     var options = {
         responsive: true,
-        'width':600,
-        'height':500,
+        'width': 600,
+        'height': 500,
         title: 'Cidades',
         titleTextStyle: {
             color: chartTextStyle
