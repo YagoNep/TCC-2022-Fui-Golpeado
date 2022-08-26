@@ -79,10 +79,10 @@ async function mostrarTodosRelatos() {
 
 function criarcard(id, titulo, descricao) {
     var card = document.createElement("div");
-    card.className = "col-lg-6 col-md-6 mb-4";
+    card.className = "cartao col-lg-6 col-md-6 mb-4";
     card.setAttribute("value", id);
     var card1 = document.createElement("div");
-    card1.className = "card bg-dark text-light h-100 p-5";
+    card1.className = "cartao bg-dark text-light h-100 p-5";
     var card2 = document.createElement("div");
     card2.className = "card-body";
     var titulo1 = document.createElement("h4");
@@ -110,10 +110,10 @@ function criarcard(id, titulo, descricao) {
 
 function criarcardImg(id, titulo, descricao, imagem) {
     var card = document.createElement("div");
-    card.className = "col-lg-6 col-md-6 mb-4";
+    card.className = "cartao col-lg-6 col-md-6 mb-4";
     card.setAttribute("value", id);
     var card1 = document.createElement("div");
-    card1.className = "card bg-dark text-light h-100 p-5";
+    card1.className = "bg-dark text-light h-100 p-5";
     var img = document.createElement("img");
     img.setAttribute("src", imagem);
     img.className = "img-fluid w-100 fotinha"
@@ -146,7 +146,7 @@ function criarcardImg(id, titulo, descricao, imagem) {
 
 function criarcardADM(id, titulo, descricao) {
     var card = document.createElement("div");
-    card.className = "col-lg-6 col-md-6 mb-4";
+    card.className = "cartao col-lg-6 col-md-6 mb-4";
     card.setAttribute("value", id);
     var card1 = document.createElement("div");
     card1.className = "card bg-light bg-opacity-75 text-dark h-100 p-5";
@@ -189,7 +189,7 @@ function criarcardADM(id, titulo, descricao) {
 
 function criarcardImgADM(id, titulo, descricao, imagem) {
     var card = document.createElement("div");
-    card.className = "col-lg-6 col-md-6 mb-4";
+    card.className = "cartao col-lg-6 col-md-6 mb-4";
     card.setAttribute("value", id);
     var card1 = document.createElement("div");
     card1.className = "card bg-light bg-opacity-75 text-dark h-100 p-5";
@@ -233,6 +233,37 @@ function criarcardImgADM(id, titulo, descricao, imagem) {
     card.appendChild(card1);
 
     document.getElementById("teste").appendChild(card)
+}
+
+document.querySelector("#btnPesquisar").addEventListener("click", filtrar)
+
+async function filtrar(event){
+    event.preventDefault();
+
+    let form = document.querySelector("#pesquisar");
+    let filtro = form.inputPesquisar.value;
+    carregarFiltro(filtro);
+}
+
+async function carregarFiltro(filtro){
+    document.querySelectorAll(".cartao").forEach(e => e.remove());;
+    console.log(filtro)
+    if(filtro == ""){
+        auxpagina = 6;
+        auxit = 0;
+        carregarRelatos();
+    }
+    else{
+        fetch('/pesquisa/' + filtro)
+        .then((res) => res.json())
+        .then((res) =>{
+                auxpagina = 6;
+                auxit = 0;
+                console.log(res);
+                auxrelatos=res
+                mostrarRelatos();
+        })
+    }
 }
 
 function editarRelato(event) {
