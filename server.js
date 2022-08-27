@@ -335,6 +335,10 @@ app.get('/cidadeselect/:id', isLoggedIn, async (req, res) => {
 app.get('/pesquisa/:filtro', isLoggedIn, async (req, res) => {
     res.send(await database.getRelatosFiltrados(req.params.filtro));
 });
+    
+app.get('/pesquisaapp/:filtro', isLoggedIn, async (req, res) => {
+    res.send(await database.getRelatosFiltradosApp(req.params.filtro));
+});
 
 app.get('/relatosimg', isLoggedIn, async (req, res) => {
     res.send(await database.getRelatosImg());

@@ -48,6 +48,12 @@ database.getRelatosFiltrados = async function (filtro) {
     return rows;
 }
 
+database.getRelatosFiltradosApp = async function (filtro) {
+    let [rows, fields] = await database.con.execute('SELECT r.*, GROUP_CONCAT(i.Nome_Imagem) AS imagens FROM imagem AS i RIGHT JOIN relato as r ON i.fk_ID_Relato = r.ID_Relato WHERE r.fk_ID_Aplicativo = ? GROUP BY r.ID_Relato ORDER BY imagens desc;', [filtro]);
+
+    return rows;
+}
+
 database.insertRelato = async function (titulo, descricao, dia, aplicativo, cidade, usuario) {
     let [data] = await database.con.execute('INSERT INTO relato (Titulo, Descricao, Data, fk_ID_Aplicativo, fk_ID_Cidade, fk_ID_Usuario) VALUES (?, ?, ?, ?, ?, ?)',
         [titulo, descricao, dia, aplicativo, cidade, usuario]);
