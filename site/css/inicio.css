@@ -42,6 +42,13 @@ body{
   overflow-wrap: anywhere;
   line-height: normal;
 }
+.app{
+  cursor:pointer
+}
+.descricao2{
+  overflow-wrap: anywhere;
+  line-height: normal;
+}
 .aplicativo{
   line-height: normal;
 }
