@@ -48,20 +48,28 @@ async function mostrarRelatos() {
     for (let i = auxit; i < auxpagina; i++) {
         if (i < auxrelatos.length) {
             if (idUser == '113860311129940378030') { //admin
-                if (i <= 1) {
-                    console.log(auxrelatos[i].fk_ID_Usuario)
-                    let image = (auxrelatos[i].imagens.split(","))
-                    let imagem = "./img/" + auxrelatos[i].fk_ID_Usuario + "/" + auxrelatos[i].ID_Relato + "/" + image[0]
-                    criarcardImgADM(auxrelatos[i].ID_Relato, auxrelatos[i].Titulo, auxrelatos[i].Descricao, imagem);
+                if (auxrelatos[i].imagens) {
+                    if (i <= 1) {
+                        console.log(auxrelatos[i].fk_ID_Usuario)
+                        let image = (auxrelatos[i].imagens.split(","))
+                        let imagem = "./img/" + auxrelatos[i].fk_ID_Usuario + "/" + auxrelatos[i].ID_Relato + "/" + image[0]
+                        criarcardImgADM(auxrelatos[i].ID_Relato, auxrelatos[i].Titulo, auxrelatos[i].Descricao, imagem);
+                    } else {
+                        criarcardADM(auxrelatos[i].ID_Relato, auxrelatos[i].Titulo, auxrelatos[i].Descricao);
+                    }
                 } else {
                     criarcardADM(auxrelatos[i].ID_Relato, auxrelatos[i].Titulo, auxrelatos[i].Descricao);
                 }
                 auxit++;
             } else {
-                if (i <= 1) {
-                    let image = (auxrelatos[i].imagens.split(","))
-                    let imagem = "./img/" + auxrelatos[i].fk_ID_Usuario + "/" + auxrelatos[i].ID_Relato + "/" + image[0]
-                    criarcardImg(auxrelatos[i].ID_Relato, auxrelatos[i].Titulo, auxrelatos[i].Descricao, imagem);
+                if (auxrelatos[i].imagens) {
+                    if (i <= 1) {
+                        let image = (auxrelatos[i].imagens.split(","))
+                        let imagem = "./img/" + auxrelatos[i].fk_ID_Usuario + "/" + auxrelatos[i].ID_Relato + "/" + image[0]
+                        criarcardImg(auxrelatos[i].ID_Relato, auxrelatos[i].Titulo, auxrelatos[i].Descricao, imagem);
+                    } else {
+                        criarcard(auxrelatos[i].ID_Relato, auxrelatos[i].Titulo, auxrelatos[i].Descricao);
+                    }
                 } else {
                     criarcard(auxrelatos[i].ID_Relato, auxrelatos[i].Titulo, auxrelatos[i].Descricao);
                 }
@@ -90,7 +98,7 @@ function criarcard(id, titulo, descricao) {
     titulo1.className = "card-title";
     var descricao1 = document.createElement("p");
     descricao1.textContent = descricao.substring(0, 175) + "...";
-    descricao1.className = "card-text";
+    descricao1.className = "descricao2 card-text";
     var botao = document.createElement("button");
     botao.setAttribute("id", id);
     botao.setAttribute("data-bs-toggle", "modal");
@@ -124,7 +132,7 @@ function criarcardImg(id, titulo, descricao, imagem) {
     titulo1.className = "card-title";
     var descricao1 = document.createElement("p");
     descricao1.textContent = descricao.substring(0, 175) + "...";
-    descricao1.className = "card-text";
+    descricao1.className = "descricao2 card-text";
     var botao = document.createElement("button");
     botao.setAttribute("id", id);
     botao.setAttribute("data-bs-toggle", "modal");
@@ -157,7 +165,7 @@ function criarcardADM(id, titulo, descricao) {
     titulo1.className = "card-title";
     var descricao1 = document.createElement("p");
     descricao1.textContent = descricao.substring(0, 175) + "...";
-    descricao1.className = "card-text";
+    descricao1.className = "descricao2 card-text";
     var botao = document.createElement("button");
     botao.setAttribute("id", id);
     botao.setAttribute("data-bs-toggle", "modal");
@@ -203,7 +211,7 @@ function criarcardImgADM(id, titulo, descricao, imagem) {
     titulo1.className = "card-title";
     var descricao1 = document.createElement("p");
     descricao1.textContent = descricao.substring(0, 175) + "...";
-    descricao1.className = "card-text";
+    descricao1.className = "descricao2 card-text";
     var botao = document.createElement("button");
     botao.setAttribute("id", id);
     botao.setAttribute("data-bs-toggle", "modal");
@@ -237,7 +245,7 @@ function criarcardImgADM(id, titulo, descricao, imagem) {
 
 document.querySelector("#btnPesquisar").addEventListener("click", filtrar)
 
-async function filtrar(event){
+async function filtrar(event) {
     event.preventDefault();
 
     let form = document.querySelector("#pesquisar");
@@ -245,26 +253,69 @@ async function filtrar(event){
     carregarFiltro(filtro);
 }
 
-async function carregarFiltro(filtro){
+async function carregarFiltro(filtro) {
     document.querySelectorAll(".cartao").forEach(e => e.remove());;
     console.log(filtro)
-    if(filtro == ""){
+    if (filtro == "") {
         auxpagina = 6;
         auxit = 0;
         carregarRelatos();
-    }
-    else{
+    } else {
         fetch('/pesquisa/' + filtro)
-        .then((res) => res.json())
-        .then((res) =>{
+            .then((res) => res.json())
+            .then((res) => {
                 auxpagina = 6;
                 auxit = 0;
                 console.log(res);
-                auxrelatos=res
+                auxrelatos = res
                 mostrarRelatos();
-        })
+            })
     }
 }
+
+document.querySelector("select[name=app]").addEventListener("change", filtroApp)
+
+async function filtroApp(event) {
+    event.preventDefault();
+
+    let select = document.querySelector("#app");
+    let filtro = select.value;
+    filtrarApp(filtro);
+}
+
+async function filtrarApp(filtro) {
+    document.querySelectorAll(".cartao").forEach(e => e.remove());;
+    console.log(filtro)
+    if (filtro == "") {
+        auxpagina = 6;
+        auxit = 0;
+        carregarRelatos();
+    } else {
+        fetch('/pesquisaapp/' + filtro)
+            .then((res) => res.json())
+            .then((res) => {
+                auxpagina = 6;
+                auxit = 0;
+                console.log(res);
+                auxrelatos = res
+                mostrarRelatos();
+            })
+    }
+}
+
+function carregarAplicativos() {
+    const appSelect = document.querySelector("select[name=app]");
+
+    fetch('/app')
+        .then((res) => res.json())
+        .then((res) => {
+            for (const app of res) {
+                appSelect.innerHTML += `<option class="dropdown-item" value='${app.ID_Aplicativo}'>${app.Nome_Aplicativo}</option>`
+            }
+        })
+}
+
+carregarAplicativos();
 
 function editarRelato(event) {
     event.preventDefault();
@@ -333,7 +384,7 @@ async function chamarModal() {
                     document.getElementById("corpomodal").appendChild(imagem);
                 }
             } else {
-                image.setAttribute("src", "")
+                // image.setAttribute("src", "")
             }
             titulo.textContent = auxtitulo;
             descricao.textContent = "• " + auxdescricao;
