@@ -13,6 +13,7 @@ var chartTextStyle = {
     color: '#FFF'
 };
 let idUser = 0;
+let filtrado = 0;
 
 async function carregarRelatos() {
     fetch('/relatos')
@@ -38,7 +39,8 @@ function mostrarPerfil(res) {
     var fotoPerfil = document.getElementById('fotoPerfil');
     var nomePerfil = document.getElementById('nomePerfil');
     fotoPerfil.src = res.picture;
-    nomePerfil.textContent = res.displayName;
+    let nome = res.displayName.split(" ");
+    nomePerfil.textContent = nome[0];
 }
 
 carregarPerfil();
@@ -243,10 +245,50 @@ function criarcardImgADM(id, titulo, descricao, imagem) {
     document.getElementById("teste").appendChild(card)
 }
 
-document.querySelector("#btnPesquisar").addEventListener("click", filtrar)
+document.querySelector("#btnPesquisar").addEventListener("click", aparecerInput)
+document.querySelector("#intro").addEventListener("click", esconderInput)
+document.querySelector("main").addEventListener("click", esconderInput)
 
-async function filtrar(event) {
+async function aparecerInput(event) {
     event.preventDefault();
+
+    if (document.querySelector("#inputPesquisar").style.display == "none") {
+        document.querySelector("#inputPesquisar").style.display = "block";
+        document.querySelector("#inputPesquisar").focus();
+        document.querySelector("#app").style.display = "block";
+    } else {
+        if (document.querySelector("#inputPesquisar").value == "") {
+            if (filtrado == 0) {
+                document.querySelector("#inputPesquisar").style.display = "none";
+                document.querySelector("#app").style.display = "none";
+            }
+            if (filtrado == 1) {
+                filtrar();
+                filtrado = 0;
+            }
+        } else {
+            filtrar();
+            filtrado = 1;
+        }
+    }
+}
+
+async function padrao(event){
+    event.preventDefault()
+
+    carregarFiltro("");
+    document.querySelector(".botao1").className = "botao1 btn btn-primary m-2 py-3 px-5";
+    document.querySelector(".botao1").textContent = "Registrar Relato";
+    document.querySelector(".botao1").setAttribute("href", "./relato");
+    document.querySelector(".botao1").removeEventListener("click", padrao);
+}
+
+async function esconderInput(){
+    document.querySelector("#inputPesquisar").style.display = "none";
+    document.querySelector("#app").style.display = "none";
+}
+
+async function filtrar() {
 
     let form = document.querySelector("#pesquisar");
     let filtro = form.inputPesquisar.value;
@@ -257,6 +299,13 @@ async function carregarFiltro(filtro) {
     document.querySelectorAll(".cartao").forEach(e => e.remove());;
     console.log(filtro)
     if (filtro == "") {
+        document.querySelectorAll(".inicio").forEach(e => e.style.display = "block")
+        document.querySelector(".texto1").textContent = "Seja bem vindo ao site!";
+        document.querySelector(".texto2").textContent = "Comece agora mesmo a registrar seus relatos";
+        document.querySelector(".botao1").className = "botao1 btn btn-primary m-2 py-3 px-5";
+        document.querySelector(".botao1").textContent = "Registrar Relato";
+        document.querySelector(".botao1").setAttribute("href", "./relato");
+        document.querySelector(".botao1").removeEventListener("click", padrao);
         auxpagina = 6;
         auxit = 0;
         carregarRelatos();
@@ -264,11 +313,24 @@ async function carregarFiltro(filtro) {
         fetch('/pesquisa/' + filtro)
             .then((res) => res.json())
             .then((res) => {
-                auxpagina = 6;
-                auxit = 0;
-                console.log(res);
-                auxrelatos = res
-                mostrarRelatos();
+                if (res == ![]) {
+                    document.querySelectorAll(".inicio").forEach(e => e.style.display = "none");
+                    document.querySelector(".texto1").textContent = "Não encontramos nenhum resultado para sua pesquisa :(";
+                    document.querySelector(".texto2").textContent = "Comece a registrar seus relatos agora mesmo!";
+                } else {
+                    document.querySelectorAll(".inicio").forEach(e => e.style.display = "block");
+                    document.querySelector(".texto1").textContent = 'Você pesquisou por "' + filtro + '"';
+                    document.querySelector(".texto2").textContent = "Clique aqui para limpar o filtro";
+                    document.querySelector(".botao1").className = "botao1 btn btn-danger m-2 py-3 px-5";
+                    document.querySelector(".botao1").textContent = "Limpar Filtro";
+                    document.querySelector(".botao1").setAttribute("href", "");
+                    document.querySelector(".botao1").addEventListener("click", padrao);
+                    auxpagina = 6;
+                    auxit = 0;
+                    // console.log(res);
+                    auxrelatos = res
+                    mostrarRelatos();
+                }
             })
     }
 }
@@ -281,6 +343,11 @@ async function filtroApp(event) {
     let select = document.querySelector("#app");
     let filtro = select.value;
     filtrarApp(filtro);
+    console.log(filtro)
+    document.querySelector(".filtro1").innerHTML= '<option value="" class="filtro1">Limpar Filtro</option>'
+    if(filtro == ""){
+        document.querySelector(".filtro1").innerHTML= '<option value="" class="filtro1">Filtrar Apps</option>'
+    }
 }
 
 async function filtrarApp(filtro) {
@@ -294,6 +361,16 @@ async function filtrarApp(filtro) {
         fetch('/pesquisaapp/' + filtro)
             .then((res) => res.json())
             .then((res) => {
+                if (res == ![]) {
+                    document.querySelectorAll(".inicio").forEach(e => e.style.display = "none");
+                    document.querySelector(".texto1").textContent = "Não encontramos nenhum resultado para sua pesquisa :(";
+                    document.querySelector(".texto2").textContent = "Comece a registrar seus relatos agora mesmo!";
+                } else {
+                    document.querySelectorAll(".inicio").forEach(e => e.style.display = "block");
+                    document.querySelector(".texto1").textContent = "Seja bem vindo ao site!";
+                    document.querySelector(".texto2").textContent = "Comece agora mesmo a registrar seus relatos";
+                }
+                console.log(res)
                 auxpagina = 6;
                 auxit = 0;
                 console.log(res);

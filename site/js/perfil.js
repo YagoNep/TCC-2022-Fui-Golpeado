@@ -66,7 +66,8 @@ function mostrarPerfil(res) {
     var fotoPerfil2 = document.getElementById('fotoPerfil2')
     var nomePerfil2 = document.getElementById('nomePerfil2');
     fotoPerfil.src = res.picture;
-    nomePerfil.textContent = res.displayName;
+    let nome = res.displayName.split(" ");
+    nomePerfil.textContent = nome[0];
     fotoPerfil2.src = res.picture;
     nomePerfil2.textContent = res.displayName;
 }
