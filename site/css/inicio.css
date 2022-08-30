@@ -21,6 +21,12 @@ body{
 #fotoPerfil{
     border-radius: 50%;
 }
+#btnPesquisar{
+  border-radius: 50%;
+}
+main{
+  min-height: 100%;
+}
 .paginas {
   text-align-last: center;
 }
