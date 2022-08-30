@@ -25,55 +25,55 @@
       <div class="container-fluid opacity-100">
         <a class="navbar-brand ms-4" href="#"><i class="bi bi-house-fill"></i> Fui Golpeado</a>
         <div class="d-flex mx-auto">
-        <form class="pesquisar d-flex mx-auto" id="pesquisar" role="search">
-          <input class="inputPesquisar form-control me-2" id="inputPesquisar" name="inputPesquisar" type="search" placeholder="Pesquisar" aria-label="Search">
-          <button class="btn btn-outline-primary btnPesquisar" id="btnPesquisar" type="submit"><i class="bi bi-search"></i></button>
-        </form>
-        <div class="ms-3">
-          <select class="app form-select" id="app" name="app">
-            <option value="">Filtrar por APP</option>
-          </select>
-        </div>
       </div>
         <div class="d-flex me-4 text-decoration-none">
-          <span class="navbar-text text-light mt-1" id="nomePerfil"></span>
+          <div class="me-2 mt-1">
+            <select class="app form-select" id="app" name="app" style="display: none">
+              <option value="" class="filtro1">Filtrar Apps</option>
+            </select>
+          </div>
+          <form class="pesquisar d-flex mx-auto" id="pesquisar" role="search">
+            <input class="inputPesquisar form-control me-2" id="inputPesquisar" name="inputPesquisar" type="search" placeholder="Pesquisar" aria-label="Search" style="display: none">
+            <button class="btn border-0 btn-outline-primary btnPesquisar" id="btnPesquisar" type="submit"><i class="bi bi-search"></i></button>
+          </form>
           <div class="dropdown">
             <img id="fotoPerfil" type="button" data-bs-toggle="dropdown" aria-expanded="false" src="" alt="" width="45"
               height="45" referrerpolicy="no-referrer"
-              class="ms-2 bg-transparent p-1 btn btn-secondary dropdown-toggle">
+              class="ms-2 me-2 bg-transparent p-1 btn btn-secondary dropdown-toggle">
             <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark">
               <li><a class="dropdown-item" href="/perfil"><i class="bi bi-person-circle"></i> Meu Perfil</a></li>
               <li><a class="dropdown-item" href="/relato"><i class="bi bi-pencil"></i> Registrar Relato</a></li>
               <li><a class="dropdown-item" href="/logout"><i class="bi bi-box-arrow-right"></i> Logout</a></li>
             </ul>
           </div>
+          <span class="navbar-text text-light mt-1 me-4" id="nomePerfil"></span>
         </div>
       </div>
     </nav>
     <div id="intro" class="p-5 text-center bg-dark text-light bg-opacity-75">
-      <h1 class="mb-3 h2">Seja bem vindo ao site!</h1>
-      <p class="mb-3">Comece agora mesmo a registrar seus relatos</p>
-      <a class="btn btn-primary m-2 py-3 px-5" href="./relato" role="button">Registrar Relato</a>
+      <h1 class="mb-3 h2 texto1">Seja bem vindo ao site!</h1>
+      <p class="mb-3 texto2">Comece agora mesmo a registrar seus relatos</p>
+      <a class="botao1 btn btn-primary m-2 py-3 px-5" href="./relato" role="button">Registrar Relato</a>
     </div>
   </header>
   <main class="bg-dark bg-opacity-75">
     <div class="container">
       <!--Section: Content-->
-      <section class="text-center">
-        <h4 class="mb-5 text-light"><strong>Últimos Relatos</strong></h4>
+      <section class="text-center inicio">
+        <h4 class="mb-5 text-light "><strong>Últimos Relatos</strong></h4>
 
         <div class="row" id="teste">
 
         </div>
       </section>
-      <div class="paginas">
+      <div class="paginas inicio">
         <button class="btn btn-outline-info" id="plus">Próx. Página</button>
         <button class="btn btn-outline-warning" id="all">Carregar Todos</button>
       </div>
-      <h4 class="mt-4 mb-5 text-light text-center"><strong>Gráficos Estatísticos</strong></h4>
-      <section class="d-xl-flex justify-content-center">
-        <div id="piechart" style="width: 600px; height: 500px;"></div>
-        <div id="piechart2" style="width: 600px; height: 500px;"></div>
+      <h4 class="mt-4 mb-5 text-light text-center inicio"><strong>Gráficos Estatísticos</strong></h4>
+      <section class="d-xl-flex justify-content-center inicio">
+        <div id="piechart" class="inicio" style="width: 600px; height: 500px;"></div>
+        <div id="piechart2" class="inicio" style="width: 600px; height: 500px;"></div>
       </section>
     </div>
 
