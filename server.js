@@ -93,6 +93,10 @@ app.delete('/delete/:id', isLoggedIn, async (req, res) =>{
     }
 });
 
+app.delete('/deleteimg/:id', isLoggedIn, async (req, res) =>{
+        await database.deleteImagemSelecionada(req.params.id);
+});
+
 app.get('/relato', isLoggedIn, (req, res) => {
     res.header('Content-Type', 'text/html');
     res.sendFile(__dirname + '/site/views/relato.html', function (err) {
@@ -173,7 +177,48 @@ app.post('/editrelato/:id', isLoggedIn, async (req, res) => {
             descricao = descricao.replace(/\n/g, " ");
             descricao = descricao.replace(/  +/g, " ");
             titulo = titulo.replace(/ +/g, " ");
-            await database.editRelato(titulo, descricao, dias, app, city, usuario, id);
+            let numero = await database.editRelato(titulo, descricao, dias, app, city, usuario, id);
+            if (req.files) {
+                if (req.files.file.length == undefined) {
+                    fs.mkdir("./site/img/" + usuario + "/" + numero.numero, {
+                        recursive: true
+                    }, function (err) {
+                        if (err) {
+                            res.send(err);
+                        }
+                    });
+                    var file = req.files.file
+                    var filename = file.name
+                    file.mv('./site/img/' + req.user.id + "/" + numero.numero + "/" + filename, function (err) {
+                        if (err) {
+                            res.send(err)
+                        }
+                    })
+                    await database.cadastraImagem(filename, numero.numero);
+                }
+                if (req.files.file.length) {
+                    fs.mkdir("./site/img/" + usuario + "/" + numero.numero, {
+                        recursive: true
+                    }, function (err) {
+                        if (err) {
+                            res.send(err);
+                        }
+                    });
+                    for (let i = 0; i < req.files.file.length; i++) {
+                        if (i > 2) {
+                            break;
+                        }
+                        var file = req.files.file[i]
+                        var filename = file.name
+                        file.mv('./site/img/' + req.user.id + "/" + numero.numero + "/" + filename, function (err) {
+                            if (err) {
+                                res.send(err)
+                            }
+                        })
+                        await database.cadastraImagem(filename, numero.numero);
+                    }
+                }
+            }
             res.status(201).redirect('/inicio');
         }
     }
@@ -223,7 +268,49 @@ app.post('/editrelato/:id', isLoggedIn, async (req, res) => {
                 descricao = descricao.replace(/\n/g, " ");
                 descricao = descricao.replace(/  +/g, " ");
                 titulo = titulo.replace(/ +/g, " ");
-                await database.editRelato(titulo, descricao, dias, app, city, usuario, id);
+                let numero = await database.editRelato(titulo, descricao, dias, app, city, usuario, id);
+                console.log(numero)
+                if (req.files) {
+                    if (req.files.file.length == undefined) {
+                        fs.mkdir("./site/img/" + usuario + "/" + numero.numero, {
+                            recursive: true
+                        }, function (err) {
+                            if (err) {
+                                res.send(err);
+                            }
+                        });
+                        var file = req.files.file
+                        var filename = file.name
+                        file.mv('./site/img/' + req.user.id + "/" + numero.numero + "/" + filename, function (err) {
+                            if (err) {
+                                res.send(err)
+                            }
+                        })
+                        await database.cadastraImagem(filename, numero.numero);
+                    }
+                    if (req.files.file.length) {
+                        fs.mkdir("./site/img/" + usuario + "/" + numero.numero, {
+                            recursive: true
+                        }, function (err) {
+                            if (err) {
+                                res.send(err);
+                            }
+                        });
+                        for (let i = 0; i < req.files.file.length; i++) {
+                            if (i > 2) {
+                                break;
+                            }
+                            var file = req.files.file[i]
+                            var filename = file.name
+                            file.mv('./site/img/' + req.user.id + "/" + numero.numero + "/" + filename, function (err) {
+                                if (err) {
+                                    res.send(err)
+                                }
+                            })
+                            await database.cadastraImagem(filename, numero.numero);
+                        }
+                    }
+                }
                 res.status(201).redirect('/perfil');
             }
         }
