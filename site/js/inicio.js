@@ -297,15 +297,15 @@ async function filtrar() {
 
 async function carregarFiltro(filtro) {
     document.querySelectorAll(".cartao").forEach(e => e.remove());;
-    console.log(filtro)
+    let botao = document.querySelector(".botao1")
     if (filtro == "") {
         document.querySelectorAll(".inicio").forEach(e => e.style.display = "block")
         document.querySelector(".texto1").textContent = "Seja bem vindo ao site!";
         document.querySelector(".texto2").textContent = "Comece agora mesmo a registrar seus relatos";
-        document.querySelector(".botao1").className = "botao1 btn btn-primary m-2 py-3 px-5";
-        document.querySelector(".botao1").textContent = "Registrar Relato";
-        document.querySelector(".botao1").setAttribute("href", "./relato");
-        document.querySelector(".botao1").removeEventListener("click", padrao);
+        botao.className = "botao1 btn btn-primary m-2 py-3 px-5";
+        botao.textContent = "Registrar Relato";
+        botao.setAttribute("href", "./relato");
+        botao.removeEventListener("click", padrao);
         auxpagina = 6;
         auxit = 0;
         carregarRelatos();
@@ -321,10 +321,10 @@ async function carregarFiltro(filtro) {
                     document.querySelectorAll(".inicio").forEach(e => e.style.display = "block");
                     document.querySelector(".texto1").textContent = 'Você pesquisou por "' + filtro + '"';
                     document.querySelector(".texto2").textContent = "Clique aqui para limpar o filtro";
-                    document.querySelector(".botao1").className = "botao1 btn btn-danger m-2 py-3 px-5";
-                    document.querySelector(".botao1").textContent = "Limpar Filtro";
-                    document.querySelector(".botao1").setAttribute("href", "");
-                    document.querySelector(".botao1").addEventListener("click", padrao);
+                    botao.className = "botao1 btn btn-danger m-2 py-3 px-5";
+                    botao.textContent = "Limpar Filtro";
+                    botao.setAttribute("href", "");
+                    botao.addEventListener("click", padrao);
                     auxpagina = 6;
                     auxit = 0;
                     // console.log(res);
@@ -411,15 +411,11 @@ function apagarRelato(event) {
         }
     };
 
-    var doc; //tirar sa porra
     var result = confirm("Tem certeza que deseja excluir o relato?");
     if (result == true) {
         fetch('/delete/' + id, header);
         location = "/perfil";
-    } else {
-        doc = "Cancel was pressed.";
     }
-    console.log(doc); // tirar sa porra
 }
 
 async function chamarModal() {
@@ -618,7 +614,7 @@ function modalImg() {
 }
 
 function removeImg() {
-    document.querySelectorAll(".modal1 img").forEach(e => e.remove());;
+    document.querySelectorAll(".modal1 img").forEach(e => e.remove());
 }
 
 document.querySelector(".btn-close").addEventListener("click", removeImg);

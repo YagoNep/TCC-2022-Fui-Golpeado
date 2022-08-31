@@ -36,8 +36,49 @@ async function carregarDados(id){
         var idRelato = document.getElementById('relato');
         idRelato.setAttribute("action", "/editrelato/" + auxId);
 
+        if (res[0].imagens) {
+            let imagens = res[0].imagens.split(",");
+            if (imagens.length == 3){
+                document.querySelector("#arquivao").disabled = true;
+            }
+            let idsImg = res[0].idImg.split(",");
+            for (let i = 0; i < imagens.length; i++) {
+                let imagempath = './img/' + res[0].fk_ID_Usuario + "/" + res[0].ID_Relato + "/" + imagens[i];
+                var imagem = document.createElement("img");
+                let btnExcluir = document.createElement("button")
+                btnExcluir.setAttribute("type", "button");
+                btnExcluir.setAttribute("class", "btn-close");
+                btnExcluir.setAttribute("id", idsImg[i]);
+                btnExcluir.addEventListener("click", excluirImg)
+                imagem.setAttribute("id", "img");
+                imagem.className = "mt-1 p-2";
+                imagem.setAttribute("src", imagempath);
+                document.getElementById("imagens").appendChild(imagem);
+                document.getElementById("imagens").appendChild(btnExcluir);
+            }
+        }
+
         mostrarDados(auxId, auxTitulo, auxDescricao, auxApp, auxEstado, auxCidade, auxUsuario);
         })
+}
+
+async function excluirImg(event){
+
+    event.preventDefault();
+
+    let header = {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json; charset=UTF-8'
+        }
+    };
+    var result = confirm("Tem certeza que deseja excluir a imagem?");
+    if (result == true) {
+        fetch('/deleteimg/' + this.id, header);
+        document.querySelectorAll("#imagens img").forEach(e => e.remove());
+        document.querySelectorAll("#imagens button").forEach(e => e.remove());
+        carregarDados(id);
+    }
 }
 
 function mostrarPerfil(res) {
@@ -148,6 +189,7 @@ function mostrarDados(id, titulo, descricao, app, estado, cidade, usuario){
     const appSelect = document.querySelector("select[name=app]");
     const ufSelect = document.querySelector("select[name=uf]");
     const userSelect = document.querySelector("[name=user]");
+    
 
     tituloSelect.value = titulo;
     descricaoSelect.textContent = descricao;
