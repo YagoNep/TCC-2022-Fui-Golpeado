@@ -40,7 +40,7 @@
   <main class="bg-dark bg-opacity-75 h-100">
     <div class="container">
     <form id="relato" method="POST" action="/editrelato" enctype="multipart/form-data">
-      <div class="p-5 text-dark bg-light bg-opacity-75 rounded-5 d-flex flex-column m-auto">
+      <div class="p-5 text-dark bg-light bg-opacity-75 rounded-5 d-flex flex-column m-auto" id="form">
         <h1 class="text-primary mx-auto"><i class="fa-solid fa-scroll"></i> <b> Editando o Relato</b></h1>
         <div class="form-outline mb-3">
           <label class="form-label h5" for="loginName">Título do Golpe</label> <!--"border bg-dark form-outline form-white" pra deixar fundo preto e falta escrita branca -->
@@ -81,9 +81,11 @@
         </fieldset>
         <label for="arquivo" class="h5 mt-3">Imagem</label>
         <div id="arquivo">
-          <input type="file" class="form-control" accept="image/*" name="file" multiple />
+          <input type="file" id="arquivao" class="form-control" accept="image/*" name="file" />
         </div>
-        <button type="submit" class="btn btn-primary mx-auto mt-4 p-3 shadow-lg" id="add2">Registrar</button>
+        <div id="imagens" class="d-flex mt-4">
+        </div>
+        <button type="submit" class="btn btn-primary mx-auto mt-4 p-3 shadow-lg" id="add2">Editar</button>
       </div>
     </form>
   </div>
