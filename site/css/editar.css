@@ -9,9 +9,6 @@
     }
   }
 
-img{
-    border-radius: 50%;
-}
 body{
     background-image: url("/img/teste.jpg");
     background-repeat: no-repeat;
@@ -28,4 +25,17 @@ body{
 
 #fotoPerfil{
     border-radius: 50%;
+}
+
+#imagens img{
+  cursor: pointer;
+  height: 20rem;
+  object-fit: cover;
+  object-position: center;
+  border-radius: 3%;
+  min-width: 30%;
+}
+
+.btn-close{
+  color: red;
 }
