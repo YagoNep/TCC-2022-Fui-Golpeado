@@ -13,6 +13,7 @@ var chartTextStyle = {
     color: '#FFF'
 };
 let idUser = 0;
+let permissao = 1;
 
 async function carregarRelatos() {
     fetch('/relatos')
@@ -31,6 +32,12 @@ function carregarPerfil() {
         .then((res) => {
             mostrarPerfil(res);
             idUser = res.id
+            fetch('/permissao' + idUser)
+                .then((res) => res.json())
+                .then((res) => {
+                    permissao = res[0].fk_ID_Permissao;
+                    console.log("A permissão é: " + permissao);
+                })
         })
 }
 
@@ -38,8 +45,7 @@ function mostrarPerfil(res) {
     var fotoPerfil = document.getElementById('fotoPerfil');
     var nomePerfil = document.getElementById('nomePerfil');
     fotoPerfil.src = res.picture;
-    let nome = res.displayName.split(" ");
-    nomePerfil.textContent = nome[0];
+    nomePerfil.textContent = res.displayName;
 }
 
 carregarPerfil();
