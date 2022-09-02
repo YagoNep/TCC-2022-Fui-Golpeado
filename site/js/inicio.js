@@ -38,7 +38,8 @@ function mostrarPerfil(res) {
     var fotoPerfil = document.getElementById('fotoPerfil');
     var nomePerfil = document.getElementById('nomePerfil');
     fotoPerfil.src = res.picture;
-    nomePerfil.textContent = res.displayName;
+    let nome = res.displayName.split(" ");
+    nomePerfil.textContent = nome[0];
 }
 
 carregarPerfil();
