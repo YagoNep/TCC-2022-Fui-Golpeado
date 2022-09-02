@@ -25,7 +25,7 @@ var __filename = url.fileURLToPath(
     import.meta.url);
 var __dirname = path.dirname(__filename);
 
-app.listen(8080, () => console.log('Servidor rodando!'));
+app.listen(80, () => console.log('Servidor rodando!'));
 
 app.use((req, res, next) => {
     console.log(req.url);
@@ -46,7 +46,7 @@ app.use(passport.session());
 passport.use(new GoogleStrategy({
         clientID: process.env.clientID,
         clientSecret: process.env.clientSecret,
-        callbackURL: "http://localhost:8080/google/callback",
+        callbackURL: "http://fuigolpeado.com.br/google/callback",
         passReqToCallback: true
     },
     function (request, accessToken, refreshToken, profile, done) {
@@ -422,7 +422,7 @@ app.get('/cidadeselect/:id', isLoggedIn, async (req, res) => {
 app.get('/pesquisa/:filtro', isLoggedIn, async (req, res) => {
     res.send(await database.getRelatosFiltrados(req.params.filtro));
 });
-    
+
 app.get('/pesquisaapp/:filtro', isLoggedIn, async (req, res) => {
     res.send(await database.getRelatosFiltradosApp(req.params.filtro));
 });
@@ -556,6 +556,11 @@ app.get('/logout', (req, res) => {
 app.get('/user', isLoggedIn, (req, res) => {
     res.send(userProfile);
 });
+
+app.get('/permissao/:id', isLoggedIn, async(req, res) => {
+    res.send(await database.getUsuarioSelecionado(req.params.id));
+});
+
 
 app.get('/inicio', isLoggedIn, (req, res) => {
     // if (req.user.id == "113860311129940378030"){                      //pra deixar uma página de admin!!!!!

@@ -31,12 +31,13 @@ function carregarPerfil() {
         .then((res) => res.json())
         .then((res) => {
             mostrarPerfil(res);
-            idUser = res.id
-            fetch('/permissao' + idUser)
+            idUser = res.id;
+            fetch('/permissao/' + idUser)
                 .then((res) => res.json())
                 .then((res) => {
                     permissao = res[0].fk_ID_Permissao;
                     console.log("A permissão é: " + permissao);
+		    carregarRelatos();
                 })
         })
 }
@@ -54,7 +55,8 @@ async function mostrarRelatos() {
 
     for (let i = auxit; i < auxpagina; i++) {
         if (i < auxrelatos.length) {
-            if (idUser == '113860311129940378030') { //admin
+		console.log(permissao);
+            if (permissao == '2') { 
                 if (i <= 1) {
                     console.log(auxrelatos[i].fk_ID_Usuario)
                     let image = (auxrelatos[i].imagens.split(","))
@@ -318,8 +320,6 @@ async function chamarModal() {
         })
 
 }
-
-carregarRelatos();
 
 async function contagemCidades() {
     fetch('/contagemcidades')
