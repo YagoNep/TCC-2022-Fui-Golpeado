@@ -4,8 +4,8 @@ const database = {};
 
 database.con = await mysql.createConnection({
     host: 'localhost',
-    user: 'root',
-    password: '',
+    user: 'yago',
+    password: '123456',
     database: 'tcc_yago',
     port: '3306'
 })
@@ -126,7 +126,7 @@ database.getContagemCidadess = async function () {
 }
 
 database.cadastraUsuario = async function (id) {
-    let [data] = await database.con.execute('INSERT INTO usuario (ID_Usuario) VALUES (?)', [id]);
+    let [data] = await database.con.execute('INSERT INTO usuario (ID_Usuario, fk_ID_Permissao) VALUES (?, ?)', [id, 1]);
 
     return {
         'numero': data.insertId
