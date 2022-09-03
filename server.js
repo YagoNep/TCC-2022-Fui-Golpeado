@@ -13,11 +13,10 @@ import database from './database.js';
 import fs from "fs";
 import fetch from "node-fetch";
 
-var userProfile;
-
 //se não estiver logado ele não permite acesso, redirecionando para a página de login novamente
 function isLoggedIn(req, res, next) {
-    req.user ? next() : res.redirect('/login');
+    if (req.isAuthenticated()) { return next() }
+    res.redirect("/login")
 }
 
 const app = express();
@@ -50,7 +49,6 @@ passport.use(new GoogleStrategy({
         passReqToCallback: true
     },
     function (request, accessToken, refreshToken, profile, done) {
-        userProfile = profile;
         return done(null, userProfile);
     }
 ));
@@ -521,7 +519,7 @@ app.get('/google/failure', async (req, res) => {
 });
 
 app.get('/verify', isLoggedIn, async (req, res) => {
-    const idUser = userProfile.id;
+    const idUser = req.user.id;
     let verify = await database.getUsuarioSelecionado(idUser);
     if (verify == ![]) {
         let cadastrar = await database.cadastraUsuario(idUser);
@@ -554,7 +552,7 @@ app.get('/logout', (req, res) => {
 });
 
 app.get('/user', isLoggedIn, (req, res) => {
-    res.send(userProfile);
+    res.send(req.user);
 });
 
 app.get('/permissao/:id', isLoggedIn, async(req, res) => {
