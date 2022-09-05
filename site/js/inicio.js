@@ -46,7 +46,8 @@ function mostrarPerfil(res) {
     var fotoPerfil = document.getElementById('fotoPerfil');
     var nomePerfil = document.getElementById('nomePerfil');
     fotoPerfil.src = res.picture;
-    nomePerfil.textContent = res.displayName;
+    let nome = res.displayName.split(" ");
+    nomePerfil.textContent = nome[0];
 }
 
 carregarPerfil();
@@ -86,9 +87,158 @@ async function mostrarTodosRelatos() {
     mostrarRelatos();
 }
 
+document.querySelector("#btnPesquisar").addEventListener("click", aparecerInput)
+document.querySelector("#intro").addEventListener("click", esconderInput)
+document.querySelector("main").addEventListener("click", esconderInput)
+
+async function aparecerInput(event) {
+    event.preventDefault();
+
+    if (document.querySelector("#inputPesquisar").style.display == "none") {
+        document.querySelector("#inputPesquisar").style.display = "block";
+        document.querySelector("#inputPesquisar").focus();
+        document.querySelector("#app").style.display = "block";
+    } else {
+        if (document.querySelector("#inputPesquisar").value == "") {
+            if (filtrado == 0) {
+                document.querySelector("#inputPesquisar").style.display = "none";
+                document.querySelector("#app").style.display = "none";
+            }
+            if (filtrado == 1) {
+                filtrar();
+                filtrado = 0;
+            }
+        } else {
+            filtrar();
+            filtrado = 1;
+        }
+    }
+}
+
+async function padrao(event){
+    event.preventDefault()
+
+    carregarFiltro("");
+    document.querySelector(".botao1").className = "botao1 btn btn-primary m-2 py-3 px-5";
+    document.querySelector(".botao1").textContent = "Registrar Relato";
+    document.querySelector(".botao1").setAttribute("href", "./relato");
+    document.querySelector(".botao1").removeEventListener("click", padrao);
+}
+
+async function esconderInput(){
+    document.querySelector("#inputPesquisar").style.display = "none";
+    document.querySelector("#app").style.display = "none";
+}
+
+async function filtrar() {
+
+    let form = document.querySelector("#pesquisar");
+    let filtro = form.inputPesquisar.value;
+    carregarFiltro(filtro);
+}
+
+async function carregarFiltro(filtro) {
+    document.querySelectorAll(".cartao").forEach(e => e.remove());;
+    let botao = document.querySelector(".botao1")
+    if (filtro == "") {
+        document.querySelectorAll(".inicio").forEach(e => e.style.display = "block")
+        document.querySelector(".texto1").textContent = "Seja bem vindo ao site!";
+        document.querySelector(".texto2").textContent = "Comece agora mesmo a registrar seus relatos";
+        botao.className = "botao1 btn btn-primary m-2 py-3 px-5";
+        botao.textContent = "Registrar Relato";
+        botao.setAttribute("href", "./relato");
+        botao.removeEventListener("click", padrao);
+        auxpagina = 6;
+        auxit = 0;
+        carregarRelatos();
+    } else {
+        fetch('/pesquisa/' + filtro)
+            .then((res) => res.json())
+            .then((res) => {
+                if (res == ![]) {
+                    document.querySelectorAll(".inicio").forEach(e => e.style.display = "none");
+                    document.querySelector(".texto1").textContent = "Não encontramos nenhum resultado para sua pesquisa :(";
+                    document.querySelector(".texto2").textContent = "Comece a registrar seus relatos agora mesmo!";
+                } else {
+                    document.querySelectorAll(".inicio").forEach(e => e.style.display = "block");
+                    document.querySelector(".texto1").textContent = 'Você pesquisou por "' + filtro + '"';
+                    document.querySelector(".texto2").textContent = "Clique aqui para limpar o filtro";
+                    botao.className = "botao1 btn btn-danger m-2 py-3 px-5";
+                    botao.textContent = "Limpar Filtro";
+                    botao.setAttribute("href", "");
+                    botao.addEventListener("click", padrao);
+                    auxpagina = 6;
+                    auxit = 0;
+                    // console.log(res);
+                    auxrelatos = res
+                    mostrarRelatos();
+                }
+            })
+    }
+}
+
+document.querySelector("select[name=app]").addEventListener("change", filtroApp)
+
+async function filtroApp(event) {
+    event.preventDefault();
+
+    let select = document.querySelector("#app");
+    let filtro = select.value;
+    filtrarApp(filtro);
+    console.log(filtro)
+    document.querySelector(".filtro1").innerHTML= '<option value="" class="filtro1">Limpar Filtro</option>'
+    if(filtro == ""){
+        document.querySelector(".filtro1").innerHTML= '<option value="" class="filtro1">Filtrar Apps</option>'
+    }
+}
+
+async function filtrarApp(filtro) {
+    document.querySelectorAll(".cartao").forEach(e => e.remove());;
+    console.log(filtro)
+    if (filtro == "") {
+        auxpagina = 6;
+        auxit = 0;
+        carregarRelatos();
+    } else {
+        fetch('/pesquisaapp/' + filtro)
+            .then((res) => res.json())
+            .then((res) => {
+                if (res == ![]) {
+                    document.querySelectorAll(".inicio").forEach(e => e.style.display = "none");
+                    document.querySelector(".texto1").textContent = "Não encontramos nenhum resultado para sua pesquisa :(";
+                    document.querySelector(".texto2").textContent = "Comece a registrar seus relatos agora mesmo!";
+                } else {
+                    document.querySelectorAll(".inicio").forEach(e => e.style.display = "block");
+                    document.querySelector(".texto1").textContent = "Seja bem vindo ao site!";
+                    document.querySelector(".texto2").textContent = "Comece agora mesmo a registrar seus relatos";
+                }
+                console.log(res)
+                auxpagina = 6;
+                auxit = 0;
+                console.log(res);
+                auxrelatos = res
+                mostrarRelatos();
+            })
+    }
+}
+
+function carregarAplicativos() {
+    const appSelect = document.querySelector("select[name=app]");
+
+    fetch('/app')
+        .then((res) => res.json())
+        .then((res) => {
+            for (const app of res) {
+                appSelect.innerHTML += `<option class="dropdown-item" value='${app.ID_Aplicativo}'>${app.Nome_Aplicativo}</option>`
+            }
+        })
+}
+
+carregarAplicativos();
+
 function criarcard(id, titulo, descricao) {
     var card = document.createElement("div");
-    card.className = "col-lg-6 col-md-6 mb-4";
+    card.className = "cartao col-lg-6 col-md-6 mb-4";
     card.setAttribute("value", id);
     var card1 = document.createElement("div");
     card1.className = "card bg-dark text-light h-100 p-5";
@@ -119,7 +269,7 @@ function criarcard(id, titulo, descricao) {
 
 function criarcardImg(id, titulo, descricao, imagem) {
     var card = document.createElement("div");
-    card.className = "col-lg-6 col-md-6 mb-4";
+    card.className = "cartao col-lg-6 col-md-6 mb-4";
     card.setAttribute("value", id);
     var card1 = document.createElement("div");
     card1.className = "card bg-dark text-light h-100 p-5";
@@ -155,7 +305,7 @@ function criarcardImg(id, titulo, descricao, imagem) {
 
 function criarcardADM(id, titulo, descricao) {
     var card = document.createElement("div");
-    card.className = "col-lg-6 col-md-6 mb-4";
+    card.className = "cartao col-lg-6 col-md-6 mb-4";
     card.setAttribute("value", id);
     var card1 = document.createElement("div");
     card1.className = "card bg-light bg-opacity-75 text-dark h-100 p-5";
@@ -198,7 +348,7 @@ function criarcardADM(id, titulo, descricao) {
 
 function criarcardImgADM(id, titulo, descricao, imagem) {
     var card = document.createElement("div");
-    card.className = "col-lg-6 col-md-6 mb-4";
+    card.className = "cartao col-lg-6 col-md-6 mb-4";
     card.setAttribute("value", id);
     var card1 = document.createElement("div");
     card1.className = "card bg-light bg-opacity-75 text-dark h-100 p-5";
@@ -311,7 +461,7 @@ async function chamarModal() {
                     document.getElementById("corpomodal").appendChild(imagem);
                 }
             } else {
-                image.setAttribute("src", "")
+                console.log("meu deus");
             }
             titulo.textContent = auxtitulo;
             descricao.textContent = "• " + auxdescricao;
