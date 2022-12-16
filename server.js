@@ -152,7 +152,7 @@ app.post('/editrelato/:id', isLoggedIn, async (req, res) => {
     
         let verify = await database.getCidadeSelecionada(city);
         let verifyApp = await database.getAplicativoSelecionado(app);
-        if (verify == ![] || verifyApp == ![]) {
+        if (verify == ![] || verifyApp) {
             const link = `https://servicodados.ibge.gov.br/api/v1/localidades/estados/${uf}/municipios`
     
             await fetch(link)
@@ -165,7 +165,7 @@ app.post('/editrelato/:id', isLoggedIn, async (req, res) => {
                         }
                     }
                 })
-        } else if (verifyApp == ![]) {
+        } else if (verifyApp) {
             deucerto = true;
         }
         if (deucerto) {
