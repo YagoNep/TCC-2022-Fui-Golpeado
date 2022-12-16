@@ -53,15 +53,15 @@ function getCities(event) {
     const citySelect = document.querySelector("[name=city]")
     const stateInput = document.querySelector("[name=state]")
 
+    //Para usar o código do estado selecionado anteriormente
     const ufValue = event.target.value
-
-
     const indexOfSelectedState = event.target.selectedIndex
     stateInput.value = event.target.options[indexOfSelectedState].text
 
-
+    //Link para consultar as cidades do estado selecionado
     const url = `https://servicodados.ibge.gov.br/api/v1/localidades/estados/${ufValue}/municipios`
 
+    //Criar a primeira opção e desabilitar o campo
     citySelect.innerHTML = "<option value>Selecione a Cidade</option>"
     citySelect.disabled = true
 
@@ -69,13 +69,13 @@ function getCities(event) {
         .then(res => res.json())
         .then(cities => {
 
+            //Cria uma opção de cada cidade que consta na resposta JSON
             for (const city of cities) {
                 citySelect.innerHTML += `<option value='${city.id}'>${city.nome}</option>`
-            } // city.id.substr(0,2) pra pegar o id do estado
-
+            }
+            //Habilita o select depois que todas as opções estiverem corretas
             citySelect.disabled = false
         })
-
 }
 
 

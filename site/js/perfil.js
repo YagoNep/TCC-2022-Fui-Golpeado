@@ -27,10 +27,15 @@ function carregarRelatos() {
     fetch('/meusrelatos/' + userID)
     .then((res) => res.json())
     .then((res) => {
-        console.log(res);
-        auxrelatos = res;
-        mostrarRelatos();
-        contagemApps();})
+        if (res == ![]) {
+            document.querySelectorAll(".intro2").forEach(e => e.style.display = "none");
+        }
+        else{
+            auxrelatos = res;
+            mostrarRelatos();
+            contagemApps();
+        }
+        })
 }
 
 function editarRelato(event){
