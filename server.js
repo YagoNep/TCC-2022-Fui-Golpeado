@@ -362,7 +362,6 @@ app.post('/relato', isLoggedIn, async (req, res) => {
     }
     if (verifyApp == ![]){
         deucerto=false;
-        redirect('/inicio');
     }
     if (deucerto) {
         //Troca os espaços repetidos por um espaço único
@@ -422,8 +421,8 @@ app.post('/relato', isLoggedIn, async (req, res) => {
         }
         let vars = await database.getRelatoSelecionado(numero.numero);
         //Redireciona para o início
-        res.status(201).redirect('/inicio');
     }
+    res.status(201).redirect('/inicio');
 })
 
 app.get('/relatoselect/:id', isLoggedIn, async (req, res) => {
