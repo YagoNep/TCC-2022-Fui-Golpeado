@@ -152,7 +152,7 @@ app.post('/editrelato/:id', isLoggedIn, async (req, res) => {
     
         let verify = await database.getCidadeSelecionada(city);
         let verifyApp = await database.getAplicativoSelecionado(app);
-        if (verify == ![] || verifyApp) {
+        if (verify == ![] && verifyApp) {
             const link = `https://servicodados.ibge.gov.br/api/v1/localidades/estados/${uf}/municipios`
     
             await fetch(link)
@@ -244,7 +244,7 @@ app.post('/editrelato/:id', isLoggedIn, async (req, res) => {
             console.log(city);
             let verify = await database.getCidadeSelecionada(city);
             let verifyApp = await database.getAplicativoSelecionado(app);
-            if (verify == ![] || verifyApp) {
+            if (verify == ![] && verifyApp) {
                 const link = `https://servicodados.ibge.gov.br/api/v1/localidades/estados/${uf}/municipios`
         
                 await fetch(link)
@@ -341,7 +341,7 @@ app.post('/relato', isLoggedIn, async (req, res) => {
     let verify = await database.getCidadeSelecionada(city);
     let verifyApp = await database.getAplicativoSelecionado(app);
     //Se não tiver cadastrada
-        if (verify == ![] || verifyApp) {
+        if (verify == ![] && verifyApp) {
         const link = `https://servicodados.ibge.gov.br/api/v1/localidades/estados/${uf}/municipios`
 
         await fetch(link)
