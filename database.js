@@ -101,6 +101,12 @@ database.getAplicativos = async function () {
     return rows;
 }
 
+database.getAplicativoSelecionado = async function (id) {
+    let [rows, fields] = await database.con.execute('SELECT * FROM aplicativo WHERE ID_Aplicativo = ?', [id]);
+
+    return rows;
+}
+
 database.getImagens = async function () {
     let [rows, fields] = await database.con.execute('SELECT * FROM imagem');
 

@@ -1,17 +1,15 @@
 import express from 'express';
-import url from 'url';
-import path from 'path';
 import fileupload from 'express-fileupload';
+import session from 'express-session';
 import passport from 'passport';
 import GoogleStrategy from 'passport-google-oauth2';
-import session from 'express-session';
-import 'dotenv/config';
-import {
-    profile
-} from 'console';
 import database from './database.js';
+import mysql from 'mysql2/promise';
+import url from 'url';
+import path from 'path';
 import fs from "fs";
 import fetch from "node-fetch";
+import 'dotenv/config';
 
 //se não estiver logado ele não permite acesso, redirecionando para a página de login novamente
 function isLoggedIn(req, res, next) {
@@ -49,7 +47,7 @@ passport.use(new GoogleStrategy({
         passReqToCallback: true
     },
     function (request, accessToken, refreshToken, profile, done) {
-        return done(null, profile);
+        return done(null, userProfile);
     }
 ));
 
@@ -79,12 +77,12 @@ app.post('/', isLoggedIn, (req, res) => {
 
 app.delete('/delete/:id', isLoggedIn, async (req, res) =>{
     let relato = await database.getRelatoSelecionado(req.params.id);
-    if(req.user.id == relato[0].fk_ID_Usuario || req.user.id == "113860311129940378030"){
+    if(req.user.id == relato[0].fk_ID_Usuario){
         let a = await database.deleteImagensRelato(req.params.id);
         console.log(a);
         let b = await database.deleteRelato(req.params.id);
         console.log(b);
-        res.redirect('/inicio')
+        res.redirect('/perfil')
     }
     else{
         res.redirect('/inicio')
@@ -152,9 +150,9 @@ app.post('/editrelato/:id', isLoggedIn, async (req, res) => {
         let id = req.params.id;
         let deucerto = false;
     
-        console.log(city);
         let verify = await database.getCidadeSelecionada(city);
-        if (verify == ![]) {
+        let verifyApp = await database.getAplicativoSelecionado(app);
+        if (verify == ![] || verifyApp == ![]) {
             const link = `https://servicodados.ibge.gov.br/api/v1/localidades/estados/${uf}/municipios`
     
             await fetch(link)
@@ -167,7 +165,7 @@ app.post('/editrelato/:id', isLoggedIn, async (req, res) => {
                         }
                     }
                 })
-        } else {
+        } else if (verifyApp == ![]) {
             deucerto = true;
         }
         if (deucerto) {
@@ -320,6 +318,7 @@ app.post('/editrelato/:id', isLoggedIn, async (req, res) => {
 });
 
 app.post('/relato', isLoggedIn, async (req, res) => {
+    //Cria as variáveis com os dados passados pela requisição
     let {
         titulo,
         descricao,
@@ -330,17 +329,16 @@ app.post('/relato', isLoggedIn, async (req, res) => {
     } = req.body;
     let usuario = req.user.id;
     let dia = Date.now();
-
     let date_ob = new Date(dia);
     let date = date_ob.getDate();
     let month = date_ob.getMonth() + 1;
     let year = date_ob.getFullYear();
-
     let dias = (year + "/" + month + "/" + date);
     let deucerto = false;
-
-    console.log(city);
+    
+    //Verifica se a cidade já está cadastrada no banco de dados
     let verify = await database.getCidadeSelecionada(city);
+    //Se não tiver cadastrada
     if (verify == ![]) {
         const link = `https://servicodados.ibge.gov.br/api/v1/localidades/estados/${uf}/municipios`
 
@@ -348,7 +346,9 @@ app.post('/relato', isLoggedIn, async (req, res) => {
             .then(res => res.json())
             .then(cities => {
                 for (const cityf of cities) {
+                    //Verifica se a cidade da opção é a mesma da API, para evitar conflitos
                     if (city == cityf.id) {
+                        //Cadastra a cidade
                         database.cadastraCidade(city, cityf.nome, uf);
                         deucerto = true;
                     }
@@ -358,13 +358,19 @@ app.post('/relato', isLoggedIn, async (req, res) => {
         deucerto = true;
     }
     if (deucerto) {
+        //Troca os espaços repetidos por um espaço único
         descricao = descricao.replace(/\r/g, " ");
         descricao = descricao.replace(/\n/g, " ");
         descricao = descricao.replace(/  +/g, " ");
         titulo = titulo.replace(/ +/g, " ");
+
+        //Insere o relato no banco de dados
         let numero = await database.insertRelato(titulo, descricao, dias, app, city, usuario);
+        //Se houver imagens
         if (req.files) {
+            //Se for só uma imagem
             if (req.files.file.length == undefined) {
+                //Cria a pasta com o ID do usuário e do relato
                 fs.mkdir("./site/img/" + usuario + "/" + numero.numero, {
                     recursive: true
                 }, function (err) {
@@ -374,6 +380,7 @@ app.post('/relato', isLoggedIn, async (req, res) => {
                 });
                 var file = req.files.file
                 var filename = file.name
+                //Move a imagem para a pasta
                 file.mv('./site/img/' + req.user.id + "/" + numero.numero + "/" + filename, function (err) {
                     if (err) {
                         res.send(err)
@@ -381,6 +388,7 @@ app.post('/relato', isLoggedIn, async (req, res) => {
                 })
                 await database.cadastraImagem(filename, numero.numero);
             }
+            //Se houver mais de uma imagem
             if (req.files.file.length) {
                 fs.mkdir("./site/img/" + usuario + "/" + numero.numero, {
                     recursive: true
@@ -389,6 +397,7 @@ app.post('/relato', isLoggedIn, async (req, res) => {
                         res.send(err);
                     }
                 });
+                //Move as imagens para a pasta e para quando houverem três
                 for (let i = 0; i < req.files.file.length; i++) {
                     if (i > 2) {
                         break;
@@ -405,6 +414,7 @@ app.post('/relato', isLoggedIn, async (req, res) => {
             }
         }
         let vars = await database.getRelatoSelecionado(numero.numero);
+        //Redireciona para o início
         res.status(201).redirect('/inicio');
     }
 })
