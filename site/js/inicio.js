@@ -463,7 +463,7 @@ async function chamarModal() {
                     document.getElementById("corpomodal").appendChild(imagem);
                 }
             } else {
-                console.log("meu deus");
+                
             }
             titulo.textContent = auxtitulo;
             descricao.textContent = "• " + auxdescricao;

@@ -234,7 +234,7 @@ async function chamarModal(){
             }
         }
         else{
-            image.setAttribute("src", "")
+            
         }
         titulo.textContent = auxtitulo;
         descricao.textContent = "• " + auxdescricao;
