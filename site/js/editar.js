@@ -25,7 +25,7 @@ async function carregarDados(id){
     await fetch('/editando/' + id)
     .then((res) => res.json())
     .then((res) => {
-        if(res == ![]){
+        if(res[0] == ![]){
             window.location = "./inicio";
         }
 
