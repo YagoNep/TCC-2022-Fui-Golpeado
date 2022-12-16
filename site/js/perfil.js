@@ -28,6 +28,7 @@ function carregarRelatos() {
     .then((res) => res.json())
     .then((res) => {
         if (res == ![]) {
+            console.log("aasdasdasd")
             document.querySelectorAll(".intro3").forEach(e => e.style.display = "none");
         }
         else{
