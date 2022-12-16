@@ -25,7 +25,6 @@ var __dirname = path.dirname(__filename);
 app.listen(80, () => console.log('Servidor rodando!'));
 
 app.use((req, res, next) => {
-    console.log(req.url);
     next();
 });
 
@@ -79,9 +78,7 @@ app.delete('/delete/:id', isLoggedIn, async (req, res) =>{
     let relato = await database.getRelatoSelecionado(req.params.id);
     if(req.user.id == relato[0].fk_ID_Usuario){
         let a = await database.deleteImagensRelato(req.params.id);
-        console.log(a);
         let b = await database.deleteRelato(req.params.id);
-        console.log(b);
         res.redirect('/perfil')
     }
     else{
@@ -137,7 +134,6 @@ app.post('/editrelato/:id', isLoggedIn, async (req, res) => {
             city,
             user
         } = req.body;
-        console.log(req.body)
         let usuario = user;
         let dia = Date.now();
     
@@ -152,7 +148,7 @@ app.post('/editrelato/:id', isLoggedIn, async (req, res) => {
     
         let verify = await database.getCidadeSelecionada(city);
         let verifyApp = await database.getAplicativoSelecionado(app);
-        if (verify == ![] && verifyApp) {
+        if (verify == ![]) {
             const link = `https://servicodados.ibge.gov.br/api/v1/localidades/estados/${uf}/municipios`
     
             await fetch(link)
@@ -165,8 +161,11 @@ app.post('/editrelato/:id', isLoggedIn, async (req, res) => {
                         }
                     }
                 })
-        } else if (verifyApp) {
+        } else {
             deucerto = true;
+        }
+        if (verifyApp == ![]){
+            deucerto=false;
         }
         if (deucerto) {
             descricao = descricao.replace(/\r/g, " ");
@@ -215,8 +214,9 @@ app.post('/editrelato/:id', isLoggedIn, async (req, res) => {
                     }
                 }
             }
-            res.status(201).redirect('/inicio');
+            
         }
+        res.status(201).redirect('/inicio');
     }
     else{
         let {
@@ -241,10 +241,9 @@ app.post('/editrelato/:id', isLoggedIn, async (req, res) => {
             let id = req.params.id;
             let deucerto = false;
         
-            console.log(city);
             let verify = await database.getCidadeSelecionada(city);
             let verifyApp = await database.getAplicativoSelecionado(app);
-            if (verify == ![] && verifyApp) {
+            if (verify == ![]) {
                 const link = `https://servicodados.ibge.gov.br/api/v1/localidades/estados/${uf}/municipios`
         
                 await fetch(link)
@@ -257,8 +256,11 @@ app.post('/editrelato/:id', isLoggedIn, async (req, res) => {
                             }
                         }
                     })
-            } else if(verifyApp) {
+            } else {
                 deucerto = true;
+            }
+            if (verifyApp == ![]){
+                deucerto=false;
             }
             if (deucerto) {
                 descricao = descricao.replace(/\r/g, " ");
@@ -266,7 +268,6 @@ app.post('/editrelato/:id', isLoggedIn, async (req, res) => {
                 descricao = descricao.replace(/  +/g, " ");
                 titulo = titulo.replace(/ +/g, " ");
                 let numero = await database.editRelato(titulo, descricao, dias, app, city, usuario, id);
-                console.log(numero)
                 if (req.files) {
                     if (req.files.file.length == undefined) {
                         fs.mkdir("./site/img/" + usuario + "/" + numero.numero, {
@@ -308,8 +309,9 @@ app.post('/editrelato/:id', isLoggedIn, async (req, res) => {
                         }
                     }
                 }
-                res.status(201).redirect('/perfil');
+                
             }
+            res.status(201).redirect('/perfil');
         }
         else{
             res.redirect('/inicio');
@@ -340,7 +342,6 @@ app.post('/relato', isLoggedIn, async (req, res) => {
     //Verifica se a cidade já está cadastrada no banco de dados
     let verify = await database.getCidadeSelecionada(city);
     let verifyApp = await database.getAplicativoSelecionado(app);
-    console.log(verifyApp);
     //Se não tiver cadastrada
         if (verify == ![]) {
         const link = `https://servicodados.ibge.gov.br/api/v1/localidades/estados/${uf}/municipios`
@@ -496,8 +497,6 @@ app.get('/relatosimg', isLoggedIn, async (req, res) => {
             c.push(a);
         }
     }
-    // console.log(c[1])
-    // console.log(c[1][1].Nome_Imagem)
     res.send(c);
 });
 
