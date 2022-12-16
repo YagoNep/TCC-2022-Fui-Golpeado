@@ -25,6 +25,10 @@ async function carregarDados(id){
     await fetch('/editando/' + id)
     .then((res) => res.json())
     .then((res) => {
+        if(res == ![]){
+            window.location = "./inicio";
+        }
+
         auxId = res[0].ID_Relato;
         auxTitulo = res[0].Titulo;
         auxDescricao = res[0].Descricao;
