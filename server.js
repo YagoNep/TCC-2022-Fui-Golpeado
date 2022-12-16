@@ -340,8 +340,9 @@ app.post('/relato', isLoggedIn, async (req, res) => {
     //Verifica se a cidade já está cadastrada no banco de dados
     let verify = await database.getCidadeSelecionada(city);
     let verifyApp = await database.getAplicativoSelecionado(app);
+    console.log(verifyApp);
     //Se não tiver cadastrada
-        if (verify == ![] && verifyApp) {
+        if (verify == ![]) {
         const link = `https://servicodados.ibge.gov.br/api/v1/localidades/estados/${uf}/municipios`
 
         await fetch(link)
@@ -356,8 +357,12 @@ app.post('/relato', isLoggedIn, async (req, res) => {
                     }
                 }
             })
-    } else if (verifyApp) {
+    } else{
         deucerto = true;
+    }
+    if (verifyApp == ![]){
+        deucerto=false;
+        redirect('/inicio');
     }
     if (deucerto) {
         //Troca os espaços repetidos por um espaço único
