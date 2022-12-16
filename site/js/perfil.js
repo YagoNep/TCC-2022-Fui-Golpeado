@@ -28,7 +28,7 @@ function carregarRelatos() {
     .then((res) => res.json())
     .then((res) => {
         if (res == ![]) {
-            document.querySelectorAll(".intro2, .intro3").forEach(e => e.style.display = "none");
+            document.querySelectorAll(".intro3").forEach(e => e.style.display = "none");
         }
         else{
             auxrelatos = res;
