@@ -93,7 +93,6 @@ async function mostrarRelatos(){
         }
         auxit++;
         }
-}
         auxpagina+=6;
 }
 
