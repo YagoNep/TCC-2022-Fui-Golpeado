@@ -78,7 +78,7 @@ app.delete('/delete/:id', isLoggedIn, async (req, res) =>{
     let relato = await database.getRelatoSelecionado(req.params.id);
     let usuario = await database.getUsuarioSelecionado(req.user.id);
     console.log(usuario);
-    if(req.user.id == relato[0].fk_ID_Usuario || usuario.fk_ID_Permissao == 2){
+    if(req.user.id == relato[0].fk_ID_Usuario || usuario[0].fk_ID_Permissao == 2){
         let a = await database.deleteImagensRelato(req.params.id);
         let b = await database.deleteRelato(req.params.id);
         res.redirect('/perfil')
@@ -128,8 +128,8 @@ app.get('/edit', isLoggedIn, (req, res) => {
 app.post('/editrelato/:id', isLoggedIn, async (req, res) => {
     let usuario = await database.getUsuarioSelecionado(req.user.id);
     console.log(usuario);
-    console.log(usuario.fk_ID_Permissao)
-    if(usuario.fk_ID_Permissao == 2){
+    console.log(usuario[0].fk_ID_Permissao)
+    if(usuario[0].fk_ID_Permissao == 2){
         let {
             titulo,
             descricao,
