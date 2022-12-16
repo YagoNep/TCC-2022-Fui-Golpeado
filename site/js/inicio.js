@@ -58,10 +58,14 @@ async function mostrarRelatos() {
         if (i < auxrelatos.length) {
             if (permissao == '2') { 
                 if (i <= 1) {
-                    console.log(auxrelatos[i].fk_ID_Usuario)
-                    let image = (auxrelatos[i].imagens.split(","))
-                    let imagem = "./img/" + auxrelatos[i].fk_ID_Usuario + "/" + auxrelatos[i].ID_Relato + "/" + image[0]
-                    criarcardImgADM(auxrelatos[i].ID_Relato, auxrelatos[i].Titulo, auxrelatos[i].Descricao, imagem);
+                    if (auxrelatos[i].imagens){
+                        let image = (auxrelatos[i].imagens.split(","))
+                        let imagem = "./img/" + auxrelatos[i].fk_ID_Usuario + "/" + auxrelatos[i].ID_Relato + "/" + image[0]
+                        criarcardImgADM(auxrelatos[i].ID_Relato, auxrelatos[i].Titulo, auxrelatos[i].Descricao, imagem);
+                    }
+                    else {
+                        criarcardADM(auxrelatos[i].ID_Relato, auxrelatos[i].Titulo, auxrelatos[i].Descricao);
+                    }
                 } else {
                     criarcardADM(auxrelatos[i].ID_Relato, auxrelatos[i].Titulo, auxrelatos[i].Descricao);
                 }
@@ -73,7 +77,9 @@ async function mostrarRelatos() {
                         let imagem = "./img/" + auxrelatos[i].fk_ID_Usuario + "/" + auxrelatos[i].ID_Relato + "/" + image[0]
                         criarcardImg(auxrelatos[i].ID_Relato, auxrelatos[i].Titulo, auxrelatos[i].Descricao, imagem);
                     }
-                    criarcard(auxrelatos[i].ID_Relato, auxrelatos[i].Titulo, auxrelatos[i].Descricao);
+                    else{
+                        criarcard(auxrelatos[i].ID_Relato, auxrelatos[i].Titulo, auxrelatos[i].Descricao);
+                    }
                 } else {
                     criarcard(auxrelatos[i].ID_Relato, auxrelatos[i].Titulo, auxrelatos[i].Descricao);
                 }
