@@ -128,6 +128,7 @@ app.get('/edit', isLoggedIn, (req, res) => {
 app.post('/editrelato/:id', isLoggedIn, async (req, res) => {
     let usuario = await database.getUsuarioSelecionado(req.user.id);
     console.log(usuario);
+    console.log(usuario.fk_ID_Permissao)
     if(usuario.fk_ID_Permissao == 2){
         let {
             titulo,
