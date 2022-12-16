@@ -56,7 +56,6 @@ async function mostrarRelatos() {
 
     for (let i = auxit; i < auxpagina; i++) {
         if (i < auxrelatos.length) {
-		console.log(permissao);
             if (permissao == '2') { 
                 if (i <= 1) {
                     console.log(auxrelatos[i].fk_ID_Usuario)
@@ -69,9 +68,12 @@ async function mostrarRelatos() {
                 auxit++;
             } else {
                 if (i <= 1) {
-                    let image = (auxrelatos[i].imagens.split(","))
-                    let imagem = "./img/" + auxrelatos[i].fk_ID_Usuario + "/" + auxrelatos[i].ID_Relato + "/" + image[0]
-                    criarcardImg(auxrelatos[i].ID_Relato, auxrelatos[i].Titulo, auxrelatos[i].Descricao, imagem);
+                    if (auxrelatos[i].imagens){
+                        let image = (auxrelatos[i].imagens.split(","))
+                        let imagem = "./img/" + auxrelatos[i].fk_ID_Usuario + "/" + auxrelatos[i].ID_Relato + "/" + image[0]
+                        criarcardImg(auxrelatos[i].ID_Relato, auxrelatos[i].Titulo, auxrelatos[i].Descricao, imagem);
+                    }
+                    criarcard(auxrelatos[i].ID_Relato, auxrelatos[i].Titulo, auxrelatos[i].Descricao);
                 } else {
                     criarcard(auxrelatos[i].ID_Relato, auxrelatos[i].Titulo, auxrelatos[i].Descricao);
                 }
