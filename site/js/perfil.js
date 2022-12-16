@@ -82,14 +82,15 @@ async function mostrarRelatos(){
     
     for(let i=auxit; i<auxpagina; i++){
         if(i<auxrelatos.length){
-            if(i<=1){
+            if (auxrelatos[i].imagens){
                 let image = (auxrelatos[i].imagens.split(","))
                 let imagem = "./img/" + auxrelatos[i].fk_ID_Usuario + "/" + auxrelatos[i].ID_Relato + "/" + image[0]
                 criarcardImg(auxrelatos[i].ID_Relato, auxrelatos[i].Titulo, auxrelatos[i].Descricao, imagem);
             }
-            else{
-                criarcard(auxrelatos[i].ID_Relato, auxrelatos[i].Titulo, auxrelatos[i].Descricao);
-            }
+            criarcard(auxrelatos[i].ID_Relato, auxrelatos[i].Titulo, auxrelatos[i].Descricao);
+        } else {
+            criarcard(auxrelatos[i].ID_Relato, auxrelatos[i].Titulo, auxrelatos[i].Descricao);
+        }
         auxit++;
         }
 }
