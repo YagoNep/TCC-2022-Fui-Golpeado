@@ -460,13 +460,7 @@ app.get('/meusrelatos/:id', isLoggedIn, async (req, res) => {
 });
 
 app.get('/editando/:id', isLoggedIn, async (req, res) => {
-    let editando = await database.getRelatoEditando(req.params.id);
-    if (editando == ![]){
-        res.redirect("/inicio")
-    }
-    else{
-        res.send(editando);
-    }
+    res.send(await database.getRelatoEditando(req.params.id));
 });
 
 app.get('/teste', isLoggedIn, (req, res) => {
