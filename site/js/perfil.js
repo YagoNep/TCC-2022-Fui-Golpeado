@@ -29,9 +29,11 @@ function carregarRelatos() {
     .then((res) => {
         if (res == ![]) {
             document.querySelectorAll("#intro3").forEach(e => e.style.display = "none");
+            document.querySelector("main").classList.add("h-100");
         }
         else{
             document.querySelectorAll("#intro2").forEach(e => e.style.display = "none");
+            document.querySelector("main").classList.remove("h-100");
             auxrelatos = res;
             mostrarRelatos();
             contagemApps();
