@@ -316,7 +316,7 @@ function criarcardADM(id, titulo, descricao) {
     card.className = "cartao col-lg-6 col-md-6 mb-4";
     card.setAttribute("value", id);
     var card1 = document.createElement("div");
-    card1.className = "card bg-light bg-opacity-75 text-dark h-100 p-5";
+    card1.className = "card bg-dark bg-opacity-75 text-light h-100 p-5";
     var card2 = document.createElement("div");
     card2.className = "card-body";
     var titulo1 = document.createElement("h4");
@@ -359,7 +359,7 @@ function criarcardImgADM(id, titulo, descricao, imagem) {
     card.className = "cartao col-lg-6 col-md-6 mb-4";
     card.setAttribute("value", id);
     var card1 = document.createElement("div");
-    card1.className = "card bg-light bg-opacity-75 text-dark h-100 p-5";
+    card1.className = "card bg-dark bg-opacity-75 text-light h-100 p-5";
     var img = document.createElement("img");
     img.setAttribute("src", imagem);
     img.className = "img-fluid w-100 fotinha"
